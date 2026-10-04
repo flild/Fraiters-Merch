@@ -5,9 +5,9 @@ import { Send, Bell, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function TelegramBanner() {
   return (
-    <section className="py-12 bg-gradient-to-b from-[#0a0b0e] to-[#0d0e14] border-b border-border/80">
+    <section className="py-12 bg-gradient-to-b from-background to-background-alt border-b border-border/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="relative rounded-2xl overflow-hidden border border-primary-900/50 bg-gradient-to-r from-neutral-950 via-[#140b0e] to-neutral-950 p-8 sm:p-12 shadow-2xl">
+        <div className="relative rounded-2xl overflow-hidden border border-primary-900/50 bg-gradient-to-r from-neutral-950 via-card-alt to-neutral-950 p-8 sm:p-12 shadow-2xl">
           
           {/* Subtle red background flare */}
           <div 

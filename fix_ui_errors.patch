@@ -1,0 +1,103 @@
+<<<<<<< SEARCH
+                  <div>
+                    <label className="block text-muted-foreground mb-1 font-medium">Telegram ник *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="@username"
+                      value={formData.telegramUsername}
+                      onChange={(e) => setFormData({ ...formData, telegramUsername: e.target.value })}
+                      className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-muted-foreground mb-1 font-medium">Телефон *</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="+7 (999) 000-00-00"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                    />
+                  </div>
+=======
+                  <div>
+                    <label className="block text-muted-foreground mb-1 font-medium">Telegram ник *</label>
+                    <input
+                      type="text"
+                      placeholder="@username"
+                      value={formData.telegramUsername}
+                      onChange={(e) => setFormData({ ...formData, telegramUsername: e.target.value })}
+                      className={`w-full bg-card border ${formErrors.telegramUsername ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
+                    />
+                    {formErrors.telegramUsername && <p className="text-red-500 text-xs mt-1">{formErrors.telegramUsername}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-muted-foreground mb-1 font-medium">Телефон *</label>
+                    <input
+                      type="tel"
+                      placeholder="+7 (999) 000-00-00"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className={`w-full bg-card border ${formErrors.phone ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
+                    />
+                    {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
+                  </div>
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+                      <div className="col-span-2">
+                        <label className="block text-muted-foreground mb-1 font-medium">Город доставки *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Москва / СПб / Казань..."
+                          value={formData.city}
+                          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                          className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                        />
+                      </div>
+=======
+                      <div className="col-span-2">
+                        <label className="block text-muted-foreground mb-1 font-medium">Город доставки *</label>
+                        <input
+                          type="text"
+                          placeholder="Москва / СПб / Казань..."
+                          value={formData.city}
+                          onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                          className={`w-full bg-card border ${formErrors.city ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
+                        />
+                        {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
+                      </div>
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+                    <div>
+                      <label className="block text-muted-foreground mb-1 font-medium">
+                        {selectedDelivery === 'cdek' ? 'Адрес ПВЗ СДЭК или улица/дом' : 'Адрес проживания (улица, дом, кв)'} *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="ул. Примерная, д. 10, кв. 25"
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                        className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                      />
+                    </div>
+=======
+                    <div>
+                      <label className="block text-muted-foreground mb-1 font-medium">
+                        {selectedDelivery === 'cdek' ? 'Адрес ПВЗ СДЭК или улица/дом' : 'Адрес проживания (улица, дом, кв)'} *
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ул. Примерная, д. 10, кв. 25"
+                        value={formData.address}
+                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                        className={`w-full bg-card border ${formErrors.address ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
+                      />
+                      {formErrors.address && <p className="text-red-500 text-xs mt-1">{formErrors.address}</p>}
+                    </div>
+>>>>>>> REPLACE

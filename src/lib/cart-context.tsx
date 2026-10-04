@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, OrderFormValues, AppSection, ViewMode, OrderRecord, ShelfLocation } from './types';
+import { Product, CartItem, OrderFormValues, AppSection, ViewMode, OrderRecord, ShelfLocation } from '@/types';
 import { PRODUCTS as INITIAL_PRODUCTS, SHELF_LOCATIONS as INITIAL_SHELVES, INITIAL_ORDERS } from './data';
 
 interface CartContextType {

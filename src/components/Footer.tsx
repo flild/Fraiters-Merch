@@ -3,7 +3,7 @@
 import React from 'react';
 import { Send, Heart, ArrowUp } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
-import { AppSection } from '@/lib/types';
+import { AppSection } from '@/types';
 
 export default function Footer() {
   const { setActiveSection } = useCart();

@@ -1,10 +1,11 @@
 'use client';
-
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Trash2, ShoppingBag, Send, ArrowRight, Truck, MapPin, Package, ShieldCheck, Check } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
-import { OrderFormValues } from '@/lib/types';
+import { OrderFormValues } from '@/types';
+import { orderFormSchema } from '@/lib/validations';
 
 export default function CartDrawer() {
   const {
@@ -35,6 +36,7 @@ export default function CartDrawer() {
   });
 
   const [copiedTelegram, setCopiedTelegram] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   if (!isCartOpen) return null;
 
@@ -77,6 +79,18 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
 
   const handleWebsiteSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const result = orderFormSchema.safeParse(formData);
+    if (!result.success) {
+      const errors: Record<string, string> = {};
+      result.error.issues.forEach((err) => {
+        if (err.path[0]) {
+          errors[err.path[0].toString()] = err.message;
+        }
+      });
+      setFormErrors(errors);
+      return;
+    }
+    setFormErrors({});
     submitOrder(formData);
     setStep('cart');
   };
@@ -94,7 +108,7 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="cart-title"
     >
       {/* Click outside to dismiss */}
       <div className="flex-1" onClick={() => setIsCartOpen(false)} />
@@ -167,11 +181,14 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                   className="bg-card/60 rounded-xl border border-border/80 p-3.5 flex gap-3.5 items-center"
                 >
                   {/* Thumb */}
-                  <img
+                  <Image
                     src={item.product.image}
                     alt={item.product.name}
                     referrerPolicy="no-referrer"
                     className="w-16 h-16 rounded-lg object-cover bg-background shrink-0"
+                    width={64}
+                    height={64}
+                    unoptimized
                   />
 
                   {/* Info */}
@@ -337,12 +354,12 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                   <label className="block text-muted-foreground mb-1 font-medium">ФИО получателя *</label>
                   <input
                     type="text"
-                    required
                     placeholder="Иванов Иван Иванович"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                    className={`w-full bg-card border ${formErrors.fullName ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
                   />
+                  {formErrors.fullName && <p className="text-red-500 text-xs mt-1">{formErrors.fullName}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -350,24 +367,24 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                     <label className="block text-muted-foreground mb-1 font-medium">Telegram ник *</label>
                     <input
                       type="text"
-                      required
                       placeholder="@username"
                       value={formData.telegramUsername}
                       onChange={(e) => setFormData({ ...formData, telegramUsername: e.target.value })}
-                      className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                      className={`w-full bg-card border ${formErrors.telegramUsername ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
                     />
+                    {formErrors.telegramUsername && <p className="text-red-500 text-xs mt-1">{formErrors.telegramUsername}</p>}
                   </div>
 
                   <div>
                     <label className="block text-muted-foreground mb-1 font-medium">Телефон *</label>
                     <input
                       type="tel"
-                      required
                       placeholder="+7 (999) 000-00-00"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                      className={`w-full bg-card border ${formErrors.phone ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
                     />
+                    {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
                   </div>
                 </div>
 
@@ -378,12 +395,12 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                         <label className="block text-muted-foreground mb-1 font-medium">Город доставки *</label>
                         <input
                           type="text"
-                          required
                           placeholder="Москва / СПб / Казань..."
                           value={formData.city}
                           onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                          className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                          className={`w-full bg-card border ${formErrors.city ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
                         />
+                        {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
                       </div>
 
                       <div>
@@ -404,12 +421,12 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                       </label>
                       <input
                         type="text"
-                        required
                         placeholder="ул. Примерная, д. 10, кв. 25"
                         value={formData.address}
                         onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                        className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
+                        className={`w-full bg-card border ${formErrors.address ? 'border-red-500' : 'border-border'} rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500`}
                       />
+                      {formErrors.address && <p className="text-red-500 text-xs mt-1">{formErrors.address}</p>}
                     </div>
                   </>
                 )}

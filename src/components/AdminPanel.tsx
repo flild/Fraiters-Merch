@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image';
 import React, { useState, useMemo } from 'react';
 import { 
   Package, MapPin, ClipboardList, Settings, Plus, Edit2, Trash2, 
@@ -9,7 +9,7 @@ import {
   ShoppingBag, Calendar, Truck
 } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
-import { Product, ProductCategory, ShelfLocation, OrderRecord } from '@/lib/types';
+import { Product, ProductCategory, ShelfLocation, OrderRecord, CartItem } from '@/types';
 import { CATEGORIES } from '@/lib/data';
 
 export default function AdminPanel() {
@@ -80,7 +80,7 @@ export default function AdminPanel() {
       deliveryStatsMap[delivery].count++;
 
       // Items
-      ord.items?.forEach((it) => {
+      ord.items?.forEach((it: CartItem) => {
         if (!it.product) return;
         totalUnits += it.quantity;
         const pid = it.product.id;
@@ -628,11 +628,14 @@ export default function AdminPanel() {
                               </td>
                               <td className="py-3 px-3">
                                 <div className="flex items-center gap-2.5">
-                                  <img
+                                  <Image
                                     src={item.product.image}
                                     alt={item.product.name}
                                     referrerPolicy="no-referrer"
                                     className="w-9 h-9 rounded-lg object-cover bg-background shrink-0"
+                                    width={36}
+                                    height={36}
+                                    unoptimized
                                   />
                                   <div>
                                     <div className="font-bold text-white line-clamp-1 max-w-[200px] sm:max-w-xs">
@@ -805,11 +808,14 @@ export default function AdminPanel() {
                           {/* Image & Title */}
                           <td className="py-3 px-4">
                             <div className="flex items-center gap-3">
-                              <img
+                              <Image
                                 src={p.image}
                                 alt={p.name}
                                 referrerPolicy="no-referrer"
                                 className="w-11 h-11 rounded-lg object-cover bg-background shrink-0"
+                                width={44}
+                                height={44}
+                                unoptimized
                               />
                               <div>
                                 <div className="font-bold text-white leading-snug line-clamp-1 max-w-xs">
@@ -1049,9 +1055,9 @@ export default function AdminPanel() {
                       {/* Items Info */}
                       <div className="bg-card/60 p-3.5 rounded-lg border border-border space-y-1">
                         <div className="text-[11px] font-mono uppercase text-muted-foreground mb-1">
-                          Товары ({ord.items.reduce((s, i) => s + i.quantity, 0)} шт):
+                          Товары ({ord.items.reduce((s: number, i: CartItem) => s + i.quantity, 0)} шт):
                         </div>
-                        {ord.items.map((it, idx) => (
+                        {ord.items.map((it: CartItem, idx: number) => (
                           <div key={idx} className="flex justify-between text-muted-foreground">
                             <span className="truncate pr-2">{it.product.name} x{it.quantity}</span>
                             <span className="font-mono text-white tabular-nums">

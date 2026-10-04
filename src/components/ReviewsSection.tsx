@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Star, Send, CheckCircle2, MessageSquarePlus } from 'lucide-react';
 import { REVIEWS } from '@/lib/data';
-import { Review } from '@/lib/types';
+import { Review } from '@/types';
 
 export default function ReviewsSection() {
   const [reviewsList, setReviewsList] = useState<Review[]>(REVIEWS);

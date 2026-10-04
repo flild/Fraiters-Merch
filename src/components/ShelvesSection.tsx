@@ -146,7 +146,7 @@ export default function ShelvesSection() {
                     В наличии на этой витрине:
                   </div>
                   <div className="flex flex-wrap gap-1.5">
-                    {shelf.itemsAvailable.map((item, idx) => (
+                    {shelf.itemsAvailable.map((item: string, idx: number) => (
                       <span
                         key={idx}
                         className="text-xs px-2.5 py-1 bg-card text-muted-foreground border border-border rounded-md"

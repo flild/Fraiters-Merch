@@ -1,10 +1,10 @@
 'use client';
-
+import Image from 'next/image';
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, ShoppingBag, Eye, Check, Sparkles } from 'lucide-react';
 import { CATEGORIES } from '@/lib/data';
-import { Product, ProductCategory } from '@/lib/types';
+import { Product, ProductCategory } from '@/types';
 import { useCart } from '@/lib/cart-context';
 
 export default function ProductCatalog() {
@@ -176,11 +176,13 @@ export default function ProductCatalog() {
                     </div>
 
                     {/* Product Image with Fallback */}
-                    <img
+                    <Image
                       src={product.image}
                       alt={product.name}
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      fill
+                      unoptimized
                       onError={(e) => {
                         // Resilient Fallback to stylized SVG card
                         e.currentTarget.style.display = 'none';
