@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ShoppingBag, Check, ShieldAlert, Sparkles, Layers, Ruler } from 'lucide-react';
@@ -49,11 +49,13 @@ export default function ProductModal() {
 
         {/* Left: Product Image */}
         <div className="md:w-1/2 relative bg-background flex items-center justify-center min-h-[260px] md:min-h-full">
-          <img
+          <Image
             src={quickViewProduct.image}
             alt={quickViewProduct.name}
             referrerPolicy="no-referrer"
-            className="w-full h-full object-cover max-h-[420px] md:max-h-full"
+            className="object-cover"
+            fill
+            unoptimized
             onError={(e) => {
               e.currentTarget.style.display = 'none';
               const parent = e.currentTarget.parentElement;

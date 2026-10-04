@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Trash2, ShoppingBag, Send, ArrowRight, Truck, MapPin, Package, ShieldCheck, Check } from 'lucide-react';
@@ -167,11 +167,14 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                   className="bg-card/60 rounded-xl border border-border/80 p-3.5 flex gap-3.5 items-center"
                 >
                   {/* Thumb */}
-                  <img
+                  <Image
                     src={item.product.image}
                     alt={item.product.name}
                     referrerPolicy="no-referrer"
                     className="w-16 h-16 rounded-lg object-cover bg-background shrink-0"
+                    width={64}
+                    height={64}
+                    unoptimized
                   />
 
                   {/* Info */}

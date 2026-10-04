@@ -177,7 +177,7 @@ export default function DeliverySection() {
         </div>
 
         {/* 4 Layers of Packaging Safety */}
-        <div className="bg-gradient-to-r from-red-950/20 via-[#0f1117] to-neutral-900 rounded-2xl border border-border p-6 sm:p-8">
+        <div className="bg-gradient-to-r from-red-950/20 via-card to-neutral-900 rounded-2xl border border-border p-6 sm:p-8">
           <div className="flex items-center gap-2 text-xs font-mono text-primary-400 uppercase mb-3">
             <ShieldCheck className="w-4 h-4" />
             <span>Стандарты надежности упаковки Fraiters</span>

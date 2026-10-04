@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image';
 import React, { useState, useMemo } from 'react';
 import { 
   Package, MapPin, ClipboardList, Settings, Plus, Edit2, Trash2, 
@@ -628,11 +628,14 @@ export default function AdminPanel() {
                               </td>
                               <td className="py-3 px-3">
                                 <div className="flex items-center gap-2.5">
-                                  <img
+                                  <Image
                                     src={item.product.image}
                                     alt={item.product.name}
                                     referrerPolicy="no-referrer"
                                     className="w-9 h-9 rounded-lg object-cover bg-background shrink-0"
+                                    width={36}
+                                    height={36}
+                                    unoptimized
                                   />
                                   <div>
                                     <div className="font-bold text-white line-clamp-1 max-w-[200px] sm:max-w-xs">
@@ -805,11 +808,14 @@ export default function AdminPanel() {
                           {/* Image & Title */}
                           <td className="py-3 px-4">
                             <div className="flex items-center gap-3">
-                              <img
+                              <Image
                                 src={p.image}
                                 alt={p.name}
                                 referrerPolicy="no-referrer"
                                 className="w-11 h-11 rounded-lg object-cover bg-background shrink-0"
+                                width={44}
+                                height={44}
+                                unoptimized
                               />
                               <div>
                                 <div className="font-bold text-white leading-snug line-clamp-1 max-w-xs">
