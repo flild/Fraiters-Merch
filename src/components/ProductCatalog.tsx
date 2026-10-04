@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, ShoppingBag, Eye, Check, Sparkles } from 'lucide-react';
 import { CATEGORIES } from '@/lib/data';
-import { Product, ProductCategory } from '@/lib/types';
+import { Product, ProductCategory } from '@/types';
 import { useCart } from '@/lib/cart-context';
 
 export default function ProductCatalog() {

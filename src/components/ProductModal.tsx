@@ -27,7 +27,7 @@ export default function ProductModal() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="product-title"
       onClick={() => setQuickViewProduct(null)}
     >
       <motion.div
@@ -132,7 +132,7 @@ export default function ProductModal() {
               Особенности изделия:
             </div>
             <ul className="space-y-1.5 text-xs text-muted-foreground">
-              {quickViewProduct.features.map((feat, i) => (
+              {quickViewProduct.features.map((feat: string, i: number) => (
                 <li key={i} className="flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-primary-500 mt-1.5 shrink-0" />
                   <span>{feat}</span>

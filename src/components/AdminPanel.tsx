@@ -9,7 +9,7 @@ import {
   ShoppingBag, Calendar, Truck
 } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
-import { Product, ProductCategory, ShelfLocation, OrderRecord } from '@/lib/types';
+import { Product, ProductCategory, ShelfLocation, OrderRecord, CartItem } from '@/types';
 import { CATEGORIES } from '@/lib/data';
 
 export default function AdminPanel() {
@@ -80,7 +80,7 @@ export default function AdminPanel() {
       deliveryStatsMap[delivery].count++;
 
       // Items
-      ord.items?.forEach((it) => {
+      ord.items?.forEach((it: CartItem) => {
         if (!it.product) return;
         totalUnits += it.quantity;
         const pid = it.product.id;
@@ -1055,9 +1055,9 @@ export default function AdminPanel() {
                       {/* Items Info */}
                       <div className="bg-card/60 p-3.5 rounded-lg border border-border space-y-1">
                         <div className="text-[11px] font-mono uppercase text-muted-foreground mb-1">
-                          Товары ({ord.items.reduce((s, i) => s + i.quantity, 0)} шт):
+                          Товары ({ord.items.reduce((s: number, i: CartItem) => s + i.quantity, 0)} шт):
                         </div>
-                        {ord.items.map((it, idx) => (
+                        {ord.items.map((it: CartItem, idx: number) => (
                           <div key={idx} className="flex justify-between text-muted-foreground">
                             <span className="truncate pr-2">{it.product.name} x{it.quantity}</span>
                             <span className="font-mono text-white tabular-nums">

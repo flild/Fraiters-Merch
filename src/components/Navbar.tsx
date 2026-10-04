@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, Send, Menu, X, ShieldCheck, Settings } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
-import { AppSection } from '@/lib/types';
+import { AppSection } from '@/types';
 
 export default function Navbar() {
   const { totalItems, subtotal, setIsCartOpen, activeSection, setActiveSection } = useCart();

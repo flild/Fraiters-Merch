@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CheckCircle2, Send, Copy, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { CartItem } from "@/types";
 import { useCart } from '@/lib/cart-context';
 
 export default function OrderSuccessModal() {
@@ -24,7 +25,7 @@ export default function OrderSuccessModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in" role="dialog" aria-modal="true" aria-labelledby="order-success-title">
       <div className="relative w-full max-w-lg bg-card border border-primary-900/60 rounded-2xl p-6 sm:p-8 shadow-2xl text-center overflow-hidden">
         
         {/* Glow */}
@@ -72,7 +73,7 @@ export default function OrderSuccessModal() {
           <div className="font-semibold text-white text-[11px] uppercase font-mono border-b border-border pb-1">
             Состав заказа:
           </div>
-          {lastOrder.items.map((item, idx) => (
+          {lastOrder.items.map((item: CartItem, idx: number) => (
             <div key={idx} className="flex justify-between items-center text-muted-foreground">
               <span className="truncate pr-2">{item.product.name} x{item.quantity}</span>
               <span className="font-mono text-white shrink-0">

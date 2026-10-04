@@ -1,4 +1,4 @@
-import { Product, ShelfLocation, Review, FaqItem, OrderRecord } from './types';
+import { Product, ShelfLocation, Review, FaqItem, OrderRecord } from '@/types';
 
 export const CATEGORIES = [
   { id: 'all', label: 'Весь мерч' },
