@@ -1,0 +1,6 @@
+{
+  "name": "Fraiters Merch",
+  "description": "Официальный магазин авторского мерча Fraiters: стенды, брелоки, открытки, одежда. Доставка по РФ и СНГ, адреса полочек в городах.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
