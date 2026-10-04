@@ -52,7 +52,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body suppressHydrationWarning className="bg-[#0b0c10] text-[#f1f3f7] antialiased selection:bg-red-600 selection:text-white min-h-screen">
+      <body suppressHydrationWarning className="bg-background text-foreground antialiased selection:bg-primary selection:text-white min-h-screen">
         {children}
       </body>
     </html>

@@ -22,10 +22,10 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#07080b] border-t border-neutral-800/80 pt-16 pb-24 lg:pb-12 text-neutral-400 text-xs">
+    <footer className="bg-background border-t border-border/80 pt-16 pb-24 lg:pb-12 text-muted-foreground text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-neutral-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-border/80">
           
           {/* Col 1: Brand */}
           <div className="md:col-span-5 space-y-4">
@@ -33,9 +33,9 @@ export default function Footer() {
               onClick={() => setActiveSection('home')}
               className="inline-block font-extrabold text-2xl text-white font-mono uppercase tracking-tight text-left cursor-pointer"
             >
-              FRAITERS<span className="text-red-600">.</span>
+              FRAITERS<span className="text-primary">.</span>
             </button>
-            <p className="text-neutral-400 max-w-sm text-xs leading-relaxed">
+            <p className="text-muted-foreground max-w-sm text-xs leading-relaxed">
               Официальный магазин мерча паблика Fraiters. Акриловые стенды, диорамы,
               голографические брелоки, открытки и одежда с доставкой по всей России и витринами в арт-шопах.
             </p>
@@ -44,9 +44,9 @@ export default function Footer() {
                 href="https://t.me/fraiters"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-2 bg-neutral-900 border border-neutral-800 hover:border-red-600 text-white rounded-lg transition-colors font-mono"
+                className="inline-flex items-center gap-2 px-3.5 py-2 bg-card border border-border hover:border-primary text-white rounded-lg transition-colors font-mono"
               >
-                <Send className="w-3.5 h-3.5 text-red-500" />
+                <Send className="w-3.5 h-3.5 text-primary-500" />
                 <span>t.me/fraiters</span>
               </a>
             </div>
@@ -62,7 +62,7 @@ export default function Footer() {
                 <li key={link.id}>
                   <button
                     onClick={() => setActiveSection(link.id)}
-                    className="hover:text-red-400 transition-colors text-left cursor-pointer"
+                    className="hover:text-primary-400 transition-colors text-left cursor-pointer"
                   >
                     {link.label}
                   </button>
@@ -76,16 +76,16 @@ export default function Footer() {
             <div className="font-mono uppercase text-white font-bold text-xs tracking-wider">
               Города с полочками
             </div>
-            <p className="text-neutral-400 leading-relaxed text-xs">
+            <p className="text-muted-foreground leading-relaxed text-xs">
               Москва (Твоя Полка), Санкт-Петербург (Полка Чудес), Казань (КрафтЛавка), Екатеринбург (Craft Corner).
             </p>
-            <div className="pt-2 text-[11px] text-neutral-500">
+            <div className="pt-2 text-[11px] text-muted-foreground">
               По вопросам оптовых заказов, маркетов и предложений пишите в ЛС Telegram:{' '}
               <a
                 href="https://t.me/fraiters"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-red-400 hover:underline"
+                className="text-primary-400 hover:underline"
               >
                 @fraiters
               </a>
@@ -95,7 +95,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-neutral-500 text-[11px]">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-muted-foreground text-[11px]">
           <div>
             © {new Date().getFullYear()} FRAITERS MERCH. Все права защищены. Авторский проект.
           </div>
