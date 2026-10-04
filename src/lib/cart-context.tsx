@@ -352,8 +352,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       {children}
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#181a20] border border-red-600/50 text-white px-4 py-3 rounded-lg shadow-2xl animate-in fade-in slide-in-from-bottom-5">
-          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-card border border-primary/50 text-white px-4 py-3 rounded-lg shadow-2xl animate-in fade-in slide-in-from-bottom-5">
+          <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
           <span className="text-sm font-medium">{toastMessage}</span>
         </div>
       )}
