@@ -12,12 +12,13 @@ import { useCart } from '@/lib/cart-context';
 import { Product, ProductCategory, ShelfLocation, OrderRecord, CartItem } from '@/types';
 import { CATEGORIES } from '@/lib/data';
 
+import Link from 'next/link';
+
 export default function AdminPanel() {
   const { 
     products, addProduct, updateProduct, deleteProduct, resetProducts,
     shelves, addShelf, updateShelf, deleteShelf, resetShelves,
     orders, updateOrderStatus, clearOrders, seedDemoOrders,
-    setActiveSection
   } = useCart();
 
   const [activeAdminTab, setActiveAdminTab] = useState<'stats' | 'products' | 'shelves' | 'orders' | 'settings'>('stats');
@@ -257,13 +258,13 @@ export default function AdminPanel() {
           </div>
 
           {/* Quick Exit to Store */}
-          <button
-            onClick={() => setActiveSection('catalog')}
+          <Link
+            href="/catalog"
             className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border hover:border-primary/70 text-foreground hover:text-white rounded-lg transition-colors cursor-pointer text-xs font-medium self-start sm:self-auto"
           >
             <ArrowLeft className="w-4 h-4 text-primary-500" />
             <span>Вернуться на сайт</span>
-          </button>
+          </Link>
         </div>
 
         {/* Admin Navigation Tabs */}

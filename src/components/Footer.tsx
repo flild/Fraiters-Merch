@@ -1,24 +1,21 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Send, Heart, ArrowUp } from 'lucide-react';
-import { useCart } from '@/lib/cart-context';
-import { AppSection } from '@/types';
 
 export default function Footer() {
-  const { setActiveSection } = useCart();
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navLinks: { id: AppSection; label: string }[] = [
-    { id: 'catalog', label: 'Каталог мерча' },
-    { id: 'shelves', label: 'Полочки в городах' },
-    { id: 'delivery', label: 'Доставка и оплата' },
-    { id: 'reviews', label: 'Отзывы покупателей' },
-    { id: 'faq', label: 'Частые вопросы' },
-    { id: 'admin', label: 'Управление магазином (Админка)' },
+  const navLinks = [
+    { href: '/catalog', label: 'Каталог мерча' },
+    { href: '/shelves', label: 'Полочки в городах' },
+    { href: '/delivery', label: 'Доставка и оплата' },
+    { href: '/reviews', label: 'Отзывы покупателей' },
+    { href: '/faq', label: 'Частые вопросы' },
+    { href: '/admin', label: 'Управление магазином (Админка)' },
   ];
 
   return (
@@ -29,12 +26,12 @@ export default function Footer() {
           
           {/* Col 1: Brand */}
           <div className="md:col-span-5 space-y-4">
-            <button
-              onClick={() => setActiveSection('home')}
+            <Link
+              href="/"
               className="inline-block font-extrabold text-2xl text-white font-mono uppercase tracking-tight text-left cursor-pointer"
             >
               FRAITERS<span className="text-primary">.</span>
-            </button>
+            </Link>
             <p className="text-muted-foreground max-w-sm text-xs leading-relaxed">
               Официальный магазин мерча паблика Fraiters. Акриловые стенды, диорамы,
               голографические брелоки, открытки и одежда с доставкой по всей России и витринами в арт-шопах.
@@ -59,13 +56,13 @@ export default function Footer() {
             </div>
             <ul className="space-y-2">
               {navLinks.map((link) => (
-                <li key={link.id}>
-                  <button
-                    onClick={() => setActiveSection(link.id)}
-                    className="hover:text-primary-400 transition-colors text-left cursor-pointer"
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="hover:text-primary-400 transition-colors text-left cursor-pointer block"
                   >
                     {link.label}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -7,7 +7,7 @@ import { CATEGORIES } from '@/lib/data';
 import { Product, ProductCategory } from '@/types';
 import { useCart } from '@/lib/cart-context';
 
-export default function ProductCatalog() {
+export default function ProductCatalog({ limit }: { limit?: number }) {
   const { addToCart, setQuickViewProduct, cart, products } = useCart();
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,7 +15,7 @@ export default function ProductCatalog() {
   const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
 
   const filteredProducts = useMemo(() => {
-    return products.filter((item) => {
+    let result = products.filter((item) => {
       const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
       const matchesSearch =
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -24,7 +24,13 @@ export default function ProductCatalog() {
       const matchesStock = !onlyInStock || item.inStock;
       return matchesCategory && matchesSearch && matchesStock;
     });
-  }, [products, selectedCategory, searchQuery, onlyInStock]);
+
+    if (limit) {
+      result = result.slice(0, limit);
+    }
+
+    return result;
+  }, [products, selectedCategory, searchQuery, onlyInStock, limit]);
 
   const handleAdd = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();

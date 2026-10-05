@@ -24,8 +24,6 @@ interface CartContextType {
   submitOrder: (values: OrderFormValues) => string;
   closeOrderSuccess: () => void;
   toastMessage: string | null;
-  activeSection: AppSection;
-  setActiveSection: (section: AppSection) => void;
   viewMode: ViewMode;
   setViewMode: (mode: ViewMode) => void;
 
@@ -115,15 +113,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [lastOrder, setLastOrder] = useState<OrderRecord | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [activeSection, setActiveSectionState] = useState<AppSection>('home');
   const [viewMode, setViewMode] = useState<ViewMode>('sections');
-
-  const setActiveSection = (section: AppSection) => {
-    setActiveSectionState(section);
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
 
   // Sync cart to localStorage
   useEffect(() => {
@@ -323,8 +313,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         submitOrder,
         closeOrderSuccess,
         toastMessage,
-        activeSection,
-        setActiveSection,
         viewMode,
         setViewMode,
 
