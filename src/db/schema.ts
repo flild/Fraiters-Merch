@@ -2,24 +2,37 @@ import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
 
 export const products = sqliteTable('products', {
   id: text('id').primaryKey(),
-  title: text('title').notNull(),
-  description: text('description').notNull(),
-  price: real('price').notNull(),
-  imageUrl: text('image_url').notNull(),
+  name: text('name').notNull(),
   category: text('category').notNull(),
-  createdAt: integer('created_at').notNull().$defaultFn(() => Date.now()),
-  updatedAt: integer('updated_at').notNull().$defaultFn(() => Date.now()),
+  categoryName: text('categoryName').notNull(),
+  price: integer('price').notNull(),
+  oldPrice: integer('oldPrice'),
+  inStock: integer('inStock', { mode: 'boolean' }).notNull().default(true),
+  isPreorder: integer('isPreorder', { mode: 'boolean' }).default(false),
+  stockCount: integer('stockCount'),
+  badge: text('badge'),
+  image: text('image').notNull(),
+  fallbackGradient: text('fallbackGradient').notNull(),
+  description: text('description').notNull(),
+  size: text('size').notNull(),
+  material: text('material').notNull(),
+  features: text('features', { mode: 'json' }).$type<string[]>().notNull(),
 });
 
 export const orders = sqliteTable('orders', {
   id: text('id').primaryKey(),
-  fullName: text('full_name').notNull(),
-  email: text('email').notNull(),
+  fullName: text('fullName').notNull(),
+  telegramUsername: text('telegramUsername').notNull(),
   phone: text('phone').notNull(),
+  city: text('city').notNull(),
   address: text('address').notNull(),
-  totalAmount: real('total_amount').notNull(),
-  status: text('status').notNull().default('pending'),
-  createdAt: integer('created_at').notNull().$defaultFn(() => Date.now()),
+  postalCode: text('postalCode').notNull(),
+  deliveryMethod: text('deliveryMethod').notNull(),
+  paymentMethod: text('paymentMethod').notNull(),
+  comment: text('comment'),
+  total: integer('total').notNull(),
+  status: text('status').notNull().default('new'),
+  date: text('date').notNull(),
 });
 
 export const orderItems = sqliteTable('order_items', {
@@ -27,5 +40,5 @@ export const orderItems = sqliteTable('order_items', {
   orderId: text('order_id').notNull().references(() => orders.id),
   productId: text('product_id').notNull().references(() => products.id),
   quantity: integer('quantity').notNull(),
-  price: real('price').notNull(),
+  price: integer('price').notNull(),
 });

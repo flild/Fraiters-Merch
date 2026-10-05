@@ -63,20 +63,31 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return [];
   });
 
-  // Dynamic products list from localStorage
-  const [products, setProducts] = useState<Product[]>(() => {
-    if (typeof window === 'undefined') return INITIAL_PRODUCTS;
-    try {
-      const saved = localStorage.getItem('fraiters_merch_products');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // Ignore
-    }
-    return INITIAL_PRODUCTS;
-  });
+  // Dynamic products list from server
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isProductsLoaded, setIsProductsLoaded] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts(data);
+        } else {
+          setProducts(INITIAL_PRODUCTS); // fallback if empty
+        }
+        setIsProductsLoaded(true);
+      })
+      .catch((err) => {
+        console.error('Failed to load products', err);
+        setProducts(INITIAL_PRODUCTS);
+        setIsProductsLoaded(true);
+      });
+  }, []);
+
+  // Sync back to localstorage or keep it purely server based?
+  // Since we want sqlite to be the source of truth, we probably should remove localstorage for products
+  // For now let's just use state that gets seeded from the API
 
   // Dynamic shelves list from localStorage
   const [shelves, setShelves] = useState<ShelfLocation[]>(() => {
@@ -123,15 +134,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       // Ignore
     }
   }, [cart]);
-
-  // Sync products to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('fraiters_merch_products', JSON.stringify(products));
-    } catch {
-      // Ignore
-    }
-  }, [products]);
 
   // Sync shelves to localStorage
   useEffect(() => {
@@ -228,26 +230,57 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Product Admin actions
-  const addProduct = (newProd: Product) => {
-    setProducts((prev) => [newProd, ...prev]);
-    showToast(`Товар «${newProd.name}» добавлен в ассортимент!`);
+  const addProduct = async (newProd: Product) => {
+    try {
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProd),
+      });
+      if (!res.ok) throw new Error('Failed to add product');
+      const added = await res.json();
+      setProducts((prev) => [added, ...prev]);
+      showToast(`Товар «${newProd.name}» добавлен в ассортимент!`);
+    } catch (e) {
+      console.error(e);
+      showToast('Ошибка при добавлении товара');
+    }
   };
 
-  const updateProduct = (id: string, updated: Partial<Product>) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, ...updated } : p))
-    );
-    showToast('Товар успешно обновлен');
+  const updateProduct = async (id: string, updated: Partial<Product>) => {
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+      if (!res.ok) throw new Error('Failed to update product');
+      const updatedProduct = await res.json();
+      setProducts((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, ...updatedProduct } : p))
+      );
+      showToast('Товар успешно обновлен');
+    } catch (e) {
+      console.error(e);
+      showToast('Ошибка при обновлении товара');
+    }
   };
 
-  const deleteProduct = (id: string) => {
-    setProducts((prev) => prev.filter((p) => p.id !== id));
-    showToast('Товар удален из каталога');
+  const deleteProduct = async (id: string) => {
+    try {
+      const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete product');
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+      showToast('Товар удален из каталога');
+    } catch (e) {
+      console.error(e);
+      showToast('Ошибка при удалении товара');
+    }
   };
 
-  const resetProducts = () => {
-    setProducts(INITIAL_PRODUCTS);
-    showToast('Ассортимент сброшен к исходному');
+  const resetProducts = async () => {
+    // Ideally this would wipe DB and re-seed, but for now just mock it
+    showToast('Сброс ассортимента через API пока не реализован');
   };
 
   // Shelf Admin actions

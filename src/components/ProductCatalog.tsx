@@ -7,12 +7,15 @@ import { CATEGORIES } from '@/lib/data';
 import { Product, ProductCategory } from '@/types';
 import { useCart } from '@/lib/cart-context';
 
-export default function ProductCatalog({ limit }: { limit?: number }) {
-  const { addToCart, setQuickViewProduct, cart, products } = useCart();
+export default function ProductCatalog({ limit, initialProducts }: { limit?: number, initialProducts: Product[] }) {
+  const { addToCart, setQuickViewProduct, cart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [onlyInStock, setOnlyInStock] = useState(false);
   const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
+
+  // Use products passed from server, or fallback to empty array
+  const products = useMemo(() => initialProducts || [], [initialProducts]);
 
   const filteredProducts = useMemo(() => {
     let result = products.filter((item) => {
