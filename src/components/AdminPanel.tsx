@@ -12,12 +12,13 @@ import { useCart } from '@/lib/cart-context';
 import { Product, ProductCategory, ShelfLocation, OrderRecord, CartItem } from '@/types';
 import { CATEGORIES } from '@/lib/data';
 
+import Link from 'next/link';
+
 export default function AdminPanel() {
   const { 
     products, addProduct, updateProduct, deleteProduct, resetProducts,
     shelves, addShelf, updateShelf, deleteShelf, resetShelves,
     orders, updateOrderStatus, clearOrders, seedDemoOrders,
-    setActiveSection
   } = useCart();
 
   const [activeAdminTab, setActiveAdminTab] = useState<'stats' | 'products' | 'shelves' | 'orders' | 'settings'>('stats');
@@ -257,13 +258,13 @@ export default function AdminPanel() {
           </div>
 
           {/* Quick Exit to Store */}
-          <button
-            onClick={() => setActiveSection('catalog')}
+          <Link
+            href="/catalog"
             className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border hover:border-primary/70 text-foreground hover:text-white rounded-lg transition-colors cursor-pointer text-xs font-medium self-start sm:self-auto"
           >
             <ArrowLeft className="w-4 h-4 text-primary-500" />
             <span>Вернуться на сайт</span>
-          </button>
+          </Link>
         </div>
 
         {/* Admin Navigation Tabs */}
@@ -1247,14 +1248,48 @@ export default function AdminPanel() {
               </div>
 
               <div>
-                <label className="block text-muted-foreground font-medium mb-1">URL изображения</label>
-                <input
-                  type="url"
-                  required
-                  value={editingProduct.image}
-                  onChange={(e) => setEditingProduct({ ...editingProduct, image: e.target.value })}
-                  className="w-full bg-card border border-border rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-primary-500"
-                />
+                <label className="block text-muted-foreground font-medium mb-1">Изображение товара</label>
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    required
+                    value={editingProduct.image}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, image: e.target.value })}
+                    className="flex-1 bg-card border border-border rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-primary-500"
+                    placeholder="URL или загрузите файл..."
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const file = e.target.files[0];
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        try {
+                          const res = await fetch('/api/upload', {
+                            method: 'POST',
+                            body: formData,
+                          });
+                          if (res.ok) {
+                            const data = await res.json();
+                            setEditingProduct({ ...editingProduct, image: data.url });
+                          }
+                        } catch (err) {
+                          console.error("Upload failed", err);
+                        }
+                      }
+                    }}
+                    className="hidden"
+                    id="file-upload"
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer bg-primary/20 text-primary-400 hover:bg-primary/30 border border-primary/30 rounded-lg px-4 py-2 flex items-center justify-center transition-colors"
+                  >
+                    Загрузить
+                  </label>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

@@ -1,26 +1,27 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, Send, Menu, X, ShieldCheck, Settings } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
-import { AppSection } from '@/types';
 
 export default function Navbar() {
-  const { totalItems, subtotal, setIsCartOpen, activeSection, setActiveSection } = useCart();
+  const { totalItems, subtotal, setIsCartOpen } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
-  const navItems: { id: AppSection; label: string }[] = [
-    { id: 'home', label: 'Главная' },
-    { id: 'catalog', label: 'Каталог' },
-    { id: 'shelves', label: 'Полочки' },
-    { id: 'delivery', label: 'Доставка' },
-    { id: 'reviews', label: 'Отзывы' },
-    { id: 'faq', label: 'FAQ' },
+  const navItems = [
+    { href: '/', label: 'Главная' },
+    { href: '/catalog', label: 'Каталог' },
+    { href: '/shelves', label: 'Полочки' },
+    { href: '/delivery', label: 'Доставка' },
+    { href: '/reviews', label: 'Отзывы' },
+    { href: '/faq', label: 'FAQ' },
   ];
 
-  const handleNavClick = (section: AppSection) => {
-    setActiveSection(section);
+  const handleNavClick = () => {
     setMobileMenuOpen(false);
   };
 
@@ -39,28 +40,30 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           
           {/* Logo */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => handleNavClick('home')}
-            className="flex items-center gap-2 group tracking-tight text-left cursor-pointer"
-          >
-            <span className="font-extrabold text-xl sm:text-2xl text-white group-hover:text-primary-500 transition-colors uppercase font-mono">
-              FRAITERS<span className="text-primary">.</span>
-            </span>
-            <span className="hidden sm:inline-block text-[10px] uppercase font-mono tracking-widest px-2 py-0.5 bg-primary-950/70 border border-primary-800/60 text-primary-300 rounded">
-              MERCH
-            </span>
-          </motion.button>
+          <Link href="/" onClick={handleNavClick}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center gap-2 group tracking-tight text-left cursor-pointer"
+            >
+              <span className="font-extrabold text-xl sm:text-2xl text-white group-hover:text-primary-500 transition-colors uppercase font-mono">
+                FRAITERS<span className="text-primary">.</span>
+              </span>
+              <span className="hidden sm:inline-block text-[10px] uppercase font-mono tracking-widest px-2 py-0.5 bg-primary-950/70 border border-primary-800/60 text-primary-300 rounded">
+                MERCH
+              </span>
+            </motion.div>
+          </Link>
 
           {/* Clean Navigation Links with smooth sliding layoutId pill */}
           <nav className="hidden md:flex items-center gap-1 sm:gap-2">
             {navItems.map((item) => {
-              const isActive = activeSection === item.id;
+              const isActive = pathname === item.href;
               return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={handleNavClick}
                   className={`relative px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-colors cursor-pointer ${
                     isActive ? 'text-white font-semibold' : 'text-muted-foreground hover:text-white'
                   }`}
@@ -74,11 +77,11 @@ export default function Navbar() {
                   )}
                   <span className="relative z-10 flex items-center gap-1.5">
                     {item.label}
-                    {item.id === 'catalog' && (
+                    {item.href === '/catalog' && (
                       <span className="w-1.5 h-1.5 rounded-full bg-primary-500 inline-block align-middle" />
                     )}
                   </span>
-                </button>
+                </Link>
               );
             })}
           </nav>
@@ -101,19 +104,20 @@ export default function Navbar() {
             </motion.a>
 
             {/* Admin Panel Button */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleNavClick('admin')}
-              className={`p-2 rounded-lg border transition-colors cursor-pointer ${
-                activeSection === 'admin'
-                  ? 'bg-primary text-white border-primary-500 shadow-md shadow-red-950'
-                  : 'bg-card border-border text-muted-foreground hover:text-white hover:border-primary/50'
-              }`}
-              title="Панель администратора (товары, цены, заказы)"
-            >
-              <Settings className="w-4 h-4 text-primary-500" />
-            </motion.button>
+            <Link href="/admin" onClick={handleNavClick}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`p-2 rounded-lg border transition-colors cursor-pointer ${
+                  pathname === '/admin'
+                    ? 'bg-primary text-white border-primary-500 shadow-md shadow-red-950'
+                    : 'bg-card border-border text-muted-foreground hover:text-white hover:border-primary/50'
+                }`}
+                title="Панель администратора (товары, цены, заказы)"
+              >
+                <Settings className="w-4 h-4 text-primary-500" />
+              </motion.div>
+            </Link>
 
             {/* Shopping Cart Button */}
             <motion.button
@@ -165,11 +169,12 @@ export default function Navbar() {
               className="md:hidden bg-background border-b border-border px-6 py-4 flex flex-col gap-2 text-sm overflow-hidden"
             >
               {navItems.map((item) => {
-                const isActive = activeSection === item.id;
+                const isActive = pathname === item.href;
                 return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item.id)}
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={handleNavClick}
                     className={`flex items-center justify-between text-left py-2.5 px-3 rounded-lg transition-colors ${
                       isActive
                         ? 'bg-primary-950/60 text-primary-400 font-semibold border border-primary-800/40'
@@ -178,15 +183,16 @@ export default function Navbar() {
                   >
                     <span>{item.label}</span>
                     {isActive && <span className="text-xs text-primary-500 font-mono">Выбрано</span>}
-                  </button>
+                  </Link>
                 );
               })}
 
               {/* Admin link in mobile menu */}
-              <button
-                onClick={() => handleNavClick('admin')}
+              <Link
+                href="/admin"
+                onClick={handleNavClick}
                 className={`flex items-center justify-between text-left py-2.5 px-3 rounded-lg transition-colors ${
-                  activeSection === 'admin'
+                  pathname === '/admin'
                     ? 'bg-primary-950/60 text-primary-400 font-semibold border border-primary-800/40'
                     : 'text-muted-foreground hover:bg-card'
                 }`}
@@ -198,7 +204,7 @@ export default function Navbar() {
                 <span className="text-[10px] font-mono px-1.5 py-0.5 bg-muted text-muted-foreground rounded">
                   Admin
                 </span>
-              </button>
+              </Link>
 
               <div className="pt-3 border-t border-border flex items-center justify-between">
                 <a
@@ -222,11 +228,12 @@ export default function Navbar() {
       {/* Floating Mobile Bottom Navigation Bar with animated active indicator */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-lg border-t border-border py-1.5 px-2 flex items-center justify-around shadow-2xl">
         {navItems.slice(0, 5).map((item) => {
-          const isActive = activeSection === item.id;
+          const isActive = pathname === item.href;
           return (
-            <button
-              key={item.id}
-              onClick={() => handleNavClick(item.id)}
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={handleNavClick}
               className={`relative flex flex-col items-center justify-center py-1.5 px-2 rounded-lg text-[11px] transition-colors ${
                 isActive ? 'text-primary-400 font-bold' : 'text-muted-foreground hover:text-white'
               }`}
@@ -239,7 +246,7 @@ export default function Navbar() {
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
-            </button>
+            </Link>
           );
         })}
         <button

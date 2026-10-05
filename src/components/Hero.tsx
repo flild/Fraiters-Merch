@@ -1,12 +1,11 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { motion } from 'motion/react';
 import { Send, ArrowRight, Sparkles, MapPin, PackageCheck, Layers, Store, Truck, MessageSquare } from 'lucide-react';
-import { useCart } from '@/lib/cart-context';
 
 export default function Hero() {
-  const { setActiveSection } = useCart();
 
   return (
     <section className="relative overflow-hidden pt-8 pb-14 md:pt-14 md:pb-20 border-b border-border/80">
@@ -61,25 +60,27 @@ export default function Hero() {
 
             {/* CTAs with direct Section switching */}
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto mb-10">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={() => setActiveSection('catalog')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-primary hover:bg-primary-500 rounded-lg shadow-lg shadow-red-900/40 transition-all cursor-pointer"
-              >
-                <span>Перейти в каталог</span>
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
+              <Link href="/catalog">
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold text-white bg-primary hover:bg-primary-500 rounded-lg shadow-lg shadow-red-900/40 transition-all cursor-pointer"
+                >
+                  <span>Перейти в каталог</span>
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </Link>
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={() => setActiveSection('shelves')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-medium text-foreground bg-card/80 hover:bg-muted border border-border/80 hover:border-primary/50 rounded-lg transition-all cursor-pointer"
-              >
-                <MapPin className="w-4 h-4 text-primary-500" />
-                <span>Где купить вживую (Полочки)</span>
-              </motion.button>
+              <Link href="/shelves">
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-medium text-foreground bg-card/80 hover:bg-muted border border-border/80 hover:border-primary/50 rounded-lg transition-all cursor-pointer"
+                >
+                  <MapPin className="w-4 h-4 text-primary-500" />
+                  <span>Где купить вживую (Полочки)</span>
+                </motion.div>
+              </Link>
 
               <motion.a
                 whileHover={{ scale: 1.02 }}
@@ -96,49 +97,53 @@ export default function Hero() {
 
             {/* Quick Section Jump Cards with animated lift */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full mb-8">
-              <motion.button
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setActiveSection('catalog')}
-                className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer group"
-              >
-                <Store className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
-                <div className="text-xs font-bold text-white">Каталог</div>
-                <div className="text-[11px] text-muted-foreground">10 позиций мерча</div>
-              </motion.button>
+              <Link href="/catalog" className="group">
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer h-full"
+                >
+                  <Store className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
+                  <div className="text-xs font-bold text-white">Каталог</div>
+                  <div className="text-[11px] text-muted-foreground">10 позиций мерча</div>
+                </motion.div>
+              </Link>
 
-              <motion.button
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setActiveSection('shelves')}
-                className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer group"
-              >
-                <MapPin className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
-                <div className="text-xs font-bold text-white">Полочки</div>
-                <div className="text-[11px] text-muted-foreground">4 города в наличии</div>
-              </motion.button>
+              <Link href="/shelves" className="group">
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer h-full"
+                >
+                  <MapPin className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
+                  <div className="text-xs font-bold text-white">Полочки</div>
+                  <div className="text-[11px] text-muted-foreground">4 города в наличии</div>
+                </motion.div>
+              </Link>
 
-              <motion.button
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setActiveSection('delivery')}
-                className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer group"
-              >
-                <Truck className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
-                <div className="text-xs font-bold text-white">Доставка</div>
-                <div className="text-[11px] text-muted-foreground">СДЭК & Почта РФ</div>
-              </motion.button>
+              <Link href="/delivery" className="group">
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer h-full"
+                >
+                  <Truck className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
+                  <div className="text-xs font-bold text-white">Доставка</div>
+                  <div className="text-[11px] text-muted-foreground">СДЭК & Почта РФ</div>
+                </motion.div>
+              </Link>
 
-              <motion.button
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setActiveSection('reviews')}
-                className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer group"
-              >
-                <MessageSquare className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
-                <div className="text-xs font-bold text-white">Отзывы</div>
-                <div className="text-[11px] text-muted-foreground">Рейтинг 5.0 ★</div>
-              </motion.button>
+              <Link href="/reviews" className="group">
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer h-full"
+                >
+                  <MessageSquare className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
+                  <div className="text-xs font-bold text-white">Отзывы</div>
+                  <div className="text-[11px] text-muted-foreground">Рейтинг 5.0 ★</div>
+                </motion.div>
+              </Link>
             </div>
 
             {/* Micro feature proofs */}
@@ -221,13 +226,13 @@ export default function Hero() {
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
                     <span>Все товары в наличии</span>
                   </div>
-                  <button
-                    onClick={() => setActiveSection('catalog')}
+                  <Link
+                    href="/catalog"
                     className="font-medium text-primary-400 hover:text-primary-300 flex items-center gap-1 cursor-pointer"
                   >
                     <span>Выбрать в каталоге</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  </Link>
                 </div>
 
               </div>

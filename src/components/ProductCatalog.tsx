@@ -7,15 +7,18 @@ import { CATEGORIES } from '@/lib/data';
 import { Product, ProductCategory } from '@/types';
 import { useCart } from '@/lib/cart-context';
 
-export default function ProductCatalog() {
-  const { addToCart, setQuickViewProduct, cart, products } = useCart();
+export default function ProductCatalog({ limit, initialProducts }: { limit?: number, initialProducts: Product[] }) {
+  const { addToCart, setQuickViewProduct, cart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [onlyInStock, setOnlyInStock] = useState(false);
   const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
 
+  // Use products passed from server, or fallback to empty array
+  const products = useMemo(() => initialProducts || [], [initialProducts]);
+
   const filteredProducts = useMemo(() => {
-    return products.filter((item) => {
+    let result = products.filter((item) => {
       const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
       const matchesSearch =
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -24,7 +27,13 @@ export default function ProductCatalog() {
       const matchesStock = !onlyInStock || item.inStock;
       return matchesCategory && matchesSearch && matchesStock;
     });
-  }, [products, selectedCategory, searchQuery, onlyInStock]);
+
+    if (limit) {
+      result = result.slice(0, limit);
+    }
+
+    return result;
+  }, [products, selectedCategory, searchQuery, onlyInStock, limit]);
 
   const handleAdd = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();

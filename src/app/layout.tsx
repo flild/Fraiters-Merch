@@ -1,5 +1,12 @@
 import type {Metadata} from 'next';
 import './globals.css'; // Global styles
+import { CartProvider } from '@/lib/cart-context';
+import Navbar from '@/components/Navbar';
+import CartDrawer from '@/components/CartDrawer';
+import ProductModal from '@/components/ProductModal';
+import OrderSuccessModal from '@/components/OrderSuccessModal';
+import Footer from '@/components/Footer';
+import PageTransition from '@/components/PageTransition';
 
 export const metadata: Metadata = {
   title: 'FRAITERS MERCH — Официальный магазин авторского мерча',
@@ -53,7 +60,20 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         />
       </head>
       <body suppressHydrationWarning className="bg-background text-foreground antialiased selection:bg-primary selection:text-white min-h-screen">
-        {children}
+        <CartProvider>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-1">
+              <PageTransition>
+                {children}
+              </PageTransition>
+            </main>
+            <Footer />
+            <CartDrawer />
+            <ProductModal />
+            <OrderSuccessModal />
+          </div>
+        </CartProvider>
       </body>
     </html>
   );
