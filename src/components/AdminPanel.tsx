@@ -37,6 +37,8 @@ export default function AdminPanel() {
 
   // Quick edit inline prices
   const [inlinePrices, setInlinePrices] = useState<Record<string, number>>({});
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   // Filtered products list
   const filteredProducts = products.filter((p) => {
@@ -1249,21 +1251,49 @@ export default function AdminPanel() {
 
               <div>
                 <label className="block text-muted-foreground font-medium mb-1">Изображение товара</label>
-                <div className="flex gap-2">
-                  <input
-                    type="url"
-                    required
-                    value={editingProduct.image}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, image: e.target.value })}
-                    className="flex-1 bg-card border border-border rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-primary-500"
-                    placeholder="URL или загрузите файл..."
-                  />
+                <div
+                  className={`relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg transition-colors overflow-hidden ${
+                    isDraggingImage
+                      ? 'border-primary bg-primary/10'
+                      : 'border-border bg-card hover:border-primary/50'
+                  }`}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDraggingImage(true);
+                  }}
+                  onDragLeave={() => setIsDraggingImage(false)}
+                  onDrop={async (e) => {
+                    e.preventDefault();
+                    setIsDraggingImage(false);
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                      const file = e.dataTransfer.files[0];
+                      setIsUploadingImage(true);
+                      const formData = new FormData();
+                      formData.append('file', file);
+                      try {
+                        const res = await fetch('/api/upload', {
+                          method: 'POST',
+                          body: formData,
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setEditingProduct({ ...editingProduct, image: data.url });
+                        }
+                      } catch (err) {
+                        console.error("Upload failed", err);
+                      } finally {
+                        setIsUploadingImage(false);
+                      }
+                    }
+                  }}
+                >
                   <input
                     type="file"
                     accept="image/*"
                     onChange={async (e) => {
                       if (e.target.files && e.target.files[0]) {
                         const file = e.target.files[0];
+                        setIsUploadingImage(true);
                         const formData = new FormData();
                         formData.append('file', file);
                         try {
@@ -1277,19 +1307,44 @@ export default function AdminPanel() {
                           }
                         } catch (err) {
                           console.error("Upload failed", err);
+                        } finally {
+                          setIsUploadingImage(false);
                         }
                       }
                     }}
-                    className="hidden"
-                    id="file-upload"
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    title=""
                   />
-                  <label
-                    htmlFor="file-upload"
-                    className="cursor-pointer bg-primary/20 text-primary-400 hover:bg-primary/30 border border-primary/30 rounded-lg px-4 py-2 flex items-center justify-center transition-colors"
-                  >
-                    Загрузить
-                  </label>
+
+                  {isUploadingImage ? (
+                    <div className="flex flex-col items-center gap-2 text-primary-400">
+                      <RefreshCw className="w-8 h-8 animate-spin" />
+                      <span className="text-sm font-medium">Загрузка...</span>
+                    </div>
+                  ) : editingProduct.image ? (
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-border bg-black/50">
+                        <Image
+                          src={editingProduct.image}
+                          alt="Product Preview"
+                          fill
+                          className="object-contain"
+                          unoptimized
+                        />
+                      </div>
+                      <span className="text-xs text-muted-foreground font-medium">Нажмите или перетащите другое изображение для замены</span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                      <Upload className="w-8 h-8 mb-1 opacity-80" />
+                      <span className="text-sm font-medium text-white">Перетащите изображение сюда</span>
+                      <span className="text-xs">или нажмите для выбора файла</span>
+                    </div>
+                  )}
                 </div>
+
+                {/* Hidden input to keep form validation working if needed */}
+                <input type="hidden" required value={editingProduct.image} />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
