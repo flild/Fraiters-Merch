@@ -15,7 +15,6 @@ export default function Footer() {
     { href: '/delivery', label: 'Доставка и оплата' },
     { href: '/reviews', label: 'Отзывы покупателей' },
     { href: '/faq', label: 'Частые вопросы' },
-    { href: '/admin', label: 'Управление магазином (Админка)' },
   ];
 
   return (
