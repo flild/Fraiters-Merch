@@ -103,22 +103,6 @@ export default function Navbar() {
               <span className="sm:hidden font-mono">TG</span>
             </motion.a>
 
-            {/* Admin Panel Button */}
-            <Link href="/admin" onClick={handleNavClick}>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`p-2 rounded-lg border transition-colors cursor-pointer ${
-                  pathname === '/admin'
-                    ? 'bg-primary text-white border-primary-500 shadow-md shadow-red-950'
-                    : 'bg-card border-border text-muted-foreground hover:text-white hover:border-primary/50'
-                }`}
-                title="Панель администратора (товары, цены, заказы)"
-              >
-                <Settings className="w-4 h-4 text-primary-500" />
-              </motion.div>
-            </Link>
-
             {/* Shopping Cart Button */}
             <motion.button
               whileHover={{ scale: 1.03 }}
@@ -186,25 +170,6 @@ export default function Navbar() {
                   </Link>
                 );
               })}
-
-              {/* Admin link in mobile menu */}
-              <Link
-                href="/admin"
-                onClick={handleNavClick}
-                className={`flex items-center justify-between text-left py-2.5 px-3 rounded-lg transition-colors ${
-                  pathname === '/admin'
-                    ? 'bg-primary-950/60 text-primary-400 font-semibold border border-primary-800/40'
-                    : 'text-muted-foreground hover:bg-card'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <Settings className="w-4 h-4 text-primary-500" />
-                  <span>Панель управления (Админка)</span>
-                </div>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 bg-muted text-muted-foreground rounded">
-                  Admin
-                </span>
-              </Link>
 
               <div className="pt-3 border-t border-border flex items-center justify-between">
                 <a
