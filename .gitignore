@@ -10,3 +10,4 @@ coverage/
 *.db
 *.sqlite
 *.sqlite3
+public/products/
