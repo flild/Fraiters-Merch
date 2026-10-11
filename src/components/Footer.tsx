@@ -1,10 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'motion/react';
 import { Send, Heart, ArrowUp } from 'lucide-react';
 
 export default function Footer() {
+  const [clickCount, setClickCount] = useState(0);
+
+  const handleLogoClick = () => {
+    setClickCount((prev) => prev + 1);
+  };
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -25,12 +32,27 @@ export default function Footer() {
           
           {/* Col 1: Brand */}
           <div className="md:col-span-5 space-y-4">
-            <Link
-              href="/"
-              className="inline-block font-extrabold text-2xl text-white font-mono uppercase tracking-tight text-left cursor-pointer"
+            <motion.div
+              animate={clickCount >= 5 ? {
+                rotate: [0, 360],
+                scale: [1, 1.2, 1],
+                transition: { duration: 0.8 }
+              } : {}}
+              onAnimationComplete={() => {
+                if (clickCount >= 5) setClickCount(0);
+              }}
+              onClick={handleLogoClick}
+              className="inline-block cursor-pointer select-none relative"
             >
-              FRAITERS<span className="text-primary">.</span>
-            </Link>
+              <Link href="/" className="font-extrabold text-2xl text-white font-mono uppercase tracking-tight text-left block">
+                FRAITERS<span className="text-primary">.</span>
+              </Link>
+              {clickCount > 0 && clickCount < 5 && (
+                <div className="text-[10px] text-primary absolute mt-1 font-mono pointer-events-none">
+                  {'★'.repeat(clickCount)}
+                </div>
+              )}
+            </motion.div>
             <p className="text-muted-foreground max-w-sm text-xs leading-relaxed">
               Официальный магазин мерча паблика Fraiters. Акриловые стенды, диорамы,
               голографические брелоки, открытки и одежда с доставкой по всей России и витринами в арт-шопах.

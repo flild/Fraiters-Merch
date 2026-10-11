@@ -7,6 +7,7 @@ import ProductModal from '@/components/ProductModal';
 import OrderSuccessModal from '@/components/OrderSuccessModal';
 import Footer from '@/components/Footer';
 import PageTransition from '@/components/PageTransition';
+import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
   title: 'FRAITERS MERCH — Официальный магазин авторского мерча',
@@ -72,6 +73,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             <CartDrawer />
             <ProductModal />
             <OrderSuccessModal />
+            <ScrollToTop />
           </div>
         </CartProvider>
       </body>

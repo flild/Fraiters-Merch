@@ -151,24 +151,56 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
 
         {/* Content Body */}
         {cart.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-card border border-border flex items-center justify-center text-neutral-600 mb-4">
-              <ShoppingBag className="w-8 h-8" />
-            </div>
-            <h3 className="text-base font-bold text-white mb-1">Корзина пуста</h3>
-            <p className="text-xs text-muted-foreground max-w-xs mb-6">
-              Вы еще не добавили ни одного товара. Выберите стенды, брелоки или стикерпаки в каталоге!
-            </p>
-            <button
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-background/50">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+              className="relative mb-6"
+            >
+              <div className="w-24 h-24 rounded-full bg-card border border-border shadow-lg flex items-center justify-center relative z-10 mx-auto">
+                <ShoppingBag className="w-10 h-10 text-muted-foreground" />
+              </div>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+                className="absolute inset-0 z-0 bg-gradient-to-tr from-primary/20 to-transparent rounded-full blur-xl opacity-60"
+              />
+            </motion.div>
+
+            <motion.h3
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className="text-lg font-bold text-white mb-2 font-mono uppercase tracking-tight"
+            >
+              Корзина пуста
+            </motion.h3>
+
+            <motion.p
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-sm text-muted-foreground max-w-[280px] mb-8 leading-relaxed"
+            >
+              Ваша коллекция мерча ждет пополнения. Выберите стенды, брелоки или стикерпаки в каталоге!
+            </motion.p>
+
+            <motion.button
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => {
                 setIsCartOpen(false);
                 const el = document.getElementById('catalog');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-5 py-2.5 text-xs font-semibold text-white bg-primary hover:bg-primary-500 rounded-lg transition-colors cursor-pointer"
+              className="btn-primary px-8 py-3 font-semibold shadow-lg shadow-primary/20"
             >
               Перейти в каталог
-            </button>
+            </motion.button>
           </div>
         ) : step === 'cart' ? (
           /* Step 1: Cart Items Review */
