@@ -15,7 +15,6 @@ export default function Navbar() {
   const navItems = [
     { href: '/', label: 'Главная' },
     { href: '/catalog', label: 'Каталог' },
-    { href: '/shelves', label: 'Полочки' },
     { href: '/delivery', label: 'Доставка' },
     { href: '/reviews', label: 'Отзывы' },
     { href: '/faq', label: 'FAQ' },
@@ -27,14 +26,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top micro announcement bar with sales trigger */}
-      <div className="bg-primary-950 border-b border-primary-950/60 text-xs py-1.5 px-4 text-center text-primary-200 flex items-center justify-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
-        <span className="font-medium">
-          Осенний дроп открыт · Отправка заказов в течение 1–3 дней · Скидки на комбо-сеты до 15%
-        </span>
-      </div>
-
       {/* Main Navigation Bar */}
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
