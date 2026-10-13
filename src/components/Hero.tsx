@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import { Send, ArrowRight, Sparkles, MapPin, PackageCheck, Layers, Store, Truck, MessageSquare } from 'lucide-react';
+import { Flame, Send, ArrowRight, Sparkles, MapPin, PackageCheck, Layers, Store, Truck, MessageSquare } from 'lucide-react';
 
 export default function Hero() {
 
@@ -39,7 +39,7 @@ export default function Hero() {
               <span aria-hidden="true">·</span>
               <span>Telegram: @fraiters</span>
               <span aria-hidden="true">·</span>
-              <span className="text-emerald-400">Дроп 2026</span>
+
             </div>
 
             {/* Main Headline */}
@@ -71,16 +71,7 @@ export default function Hero() {
                 </motion.div>
               </Link>
 
-              <Link href="/shelves">
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.96 }}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 text-sm font-medium text-foreground bg-card/80 hover:bg-muted border border-border/80 hover:border-primary/50 rounded-lg transition-all cursor-pointer"
-                >
-                  <MapPin className="w-4 h-4 text-primary-500" />
-                  <span>Где купить вживую (Полочки)</span>
-                </motion.div>
-              </Link>
+
 
               <motion.a
                 whileHover={{ scale: 1.02 }}
@@ -109,15 +100,15 @@ export default function Hero() {
                 </motion.div>
               </Link>
 
-              <Link href="/shelves" className="group">
+              <Link href="/catalog" className="group">
                 <motion.div
                   whileHover={{ y: -4 }}
                   whileTap={{ scale: 0.97 }}
                   className="p-3 rounded-xl bg-card/70 border border-border hover:border-primary/60 text-left transition-all cursor-pointer h-full"
                 >
-                  <MapPin className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
-                  <div className="text-xs font-bold text-white">Полочки</div>
-                  <div className="text-[11px] text-muted-foreground">4 города в наличии</div>
+                  <Flame className="w-4 h-4 text-primary-500 mb-1.5 group-hover:scale-110 transition-transform" />
+                  <div className="text-xs font-bold text-white">Популярное</div>
+                  <div className="text-[11px] text-muted-foreground">Хиты продаж</div>
                 </motion.div>
               </Link>
 
@@ -162,13 +153,7 @@ export default function Hero() {
                   <div className="text-muted-foreground">Подарочные стикеры в конверте</div>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5 col-span-2 sm:col-span-1">
-                <Layers className="w-4 h-4 text-primary-500 shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-semibold text-foreground">4 города в наличии</div>
-                  <div className="text-muted-foreground">Москва, СПб, Казань, Екб</div>
-                </div>
-              </div>
+
             </div>
           </div>
 
@@ -185,11 +170,9 @@ export default function Hero() {
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-mono font-semibold text-primary-400 uppercase tracking-wider flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-primary-500 animate-ping inline-block" />
-                    Актуальный дроп
+                    Актуальные новинки
                   </span>
-                  <span className="text-xs font-mono text-muted-foreground">
-                    Осень 2026
-                  </span>
+
                 </div>
 
                 {/* Hero featured visual composition */}

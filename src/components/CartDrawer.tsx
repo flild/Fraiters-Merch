@@ -40,7 +40,7 @@ export default function CartDrawer() {
 
   if (!isCartOpen) return null;
 
-  const handleDeliveryChange = (method: 'cdek' | 'post' | 'shelf') => {
+  const handleDeliveryChange = (method: 'cdek' | 'post') => {
     setSelectedDelivery(method);
     setFormData((prev) => ({ ...prev, deliveryMethod: method }));
   };
@@ -53,11 +53,7 @@ export default function CartDrawer() {
     const deliveryName =
       selectedDelivery === 'cdek'
         ? 'СДЭК до ПВЗ'
-        : selectedDelivery === 'post'
-        ? 'Почта России 1-й класс'
-        : 'Самовывоз с полочки';
-
-    return `Привет! Хочу оформить заказ мерча Fraiters (${orderId}):
+        : 'Почта России 1-й класс';return `Привет! Хочу оформить заказ мерча Fraiters (${orderId}):
 \n${itemsText}
 \nСпособ доставки: ${deliveryName} (${deliveryCost} ₽)
 Итого к оплате: ${totalPrice.toLocaleString('ru-RU')} ₽
@@ -305,21 +301,7 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                     <span className="text-[10px] font-mono mt-1 text-muted-foreground">350 ₽</span>
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={() => handleDeliveryChange('shelf')}
-                    className={`p-2.5 rounded-lg border text-left flex flex-col justify-between transition-colors cursor-pointer ${
-                      selectedDelivery === 'shelf'
-                        ? 'bg-primary-950/40 border-primary text-white'
-                        : 'bg-card border-border text-muted-foreground hover:text-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-1 text-[11px] font-bold">
-                      <MapPin className="w-3 h-3 text-emerald-400" />
-                      <span>Полочка</span>
-                    </div>
-                    <span className="text-[10px] font-mono mt-1 text-emerald-400">0 ₽</span>
-                  </button>
+
                 </div>
               </div>
             </div>
@@ -420,9 +402,8 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                   </div>
                 </div>
 
-                {selectedDelivery !== 'shelf' && (
-                  <>
-                    <div className="grid grid-cols-3 gap-3">
+
+                  <div className="grid grid-cols-3 gap-3">
                       <div className="col-span-2">
                         <label className="block text-muted-foreground mb-1 font-medium">Город доставки *</label>
                         <input
@@ -442,11 +423,9 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                           placeholder="101000"
                           value={formData.postalCode}
                           onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
-                          className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
-                        />
+                          className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"                        />
                       </div>
                     </div>
-
                     <div>
                       <label className="block text-muted-foreground mb-1 font-medium">
                         {selectedDelivery === 'cdek' ? 'Адрес ПВЗ СДЭК или улица/дом' : 'Адрес проживания (улица, дом, кв)'} *
@@ -460,24 +439,7 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                       />
                       {formErrors.address && <p className="text-red-500 text-xs mt-1">{formErrors.address}</p>}
                     </div>
-                  </>
-                )}
-
-                {selectedDelivery === 'shelf' && (
-                  <div>
-                    <label className="block text-muted-foreground mb-1 font-medium">Выберите полочку для брони</label>
-                    <select
-                      value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      className="w-full bg-card border border-border rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-primary-500"
-                    >
-                      <option value="Москва, Маросейка 6-8 (Полка №42)">Москва, Твоя Полка (Маросейка 6-8)</option>
-                      <option value="Санкт-Петербург, Севкабель (Полка B-14)">СПб, Полка Чудес (Севкабель Порт)</option>
-                      <option value="Казань, Баумана 29 (Полка №19)">Казань, КрафтЛавка (Баумана 29)</option>
-                      <option value="Екатеринбург, Вайнера 10 (Полка №8)">Екб, Craft Corner (Вайнера 10)</option>
-                    </select>
-                  </div>
-                )}
+              </div>
 
                 <div>
                   <label className="block text-muted-foreground mb-1 font-medium">Комментарий к заказу</label>
@@ -489,7 +451,6 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
                     className="w-full bg-card border border-border rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-primary-500"
                   />
                 </div>
-              </div>
 
             </div>
 

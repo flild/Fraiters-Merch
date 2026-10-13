@@ -11,15 +11,15 @@ import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
   title: 'FRAITERS MERCH — Официальный магазин авторского мерча',
-  description: 'Коллекционный мерч от Fraiters: двусторонние акриловые стенды, диорамы, голографические брелоки, виниловые стикерпаки и оверсайз худи. Доставка СДЭК и Почтой РФ, полочки в 4 городах.',
-  keywords: ['Fraiters', 'мерч', 'акриловый стенд', 'брелок', 'стикеры', 'худи', 'аниме мерч', 'полочки', 'тгк fraiters'],
+  description: 'Коллекционный мерч от Fraiters: двусторонние акриловые стенды, диорамы, голографические брелоки, виниловые стикерпаки и оверсайз худи. Доставка СДЭК и Почтой РФ.',
+  keywords: ['Fraiters', 'мерч', 'акриловый стенд', 'брелок', 'стикеры', 'худи', 'аниме мерч', 'тгк fraiters'],
   authors: [{ name: 'Fraiters' }],
   creator: 'Fraiters',
   publisher: 'Fraiters Merch',
   robots: 'index, follow',
   openGraph: {
     title: 'FRAITERS MERCH — Коллекционный мерч и аксессуары',
-    description: 'Оригинальные акриловые стенды, брелоки, открытки и худи от Fraiters. Заказывайте с доставкой по РФ и СНГ или забирайте на полочках.',
+    description: 'Оригинальные акриловые стенды, брелоки, открытки и худи от Fraiters. Заказывайте с доставкой по РФ и СНГ.',
     type: 'website',
     locale: 'ru_RU',
     siteName: 'FRAITERS MERCH',

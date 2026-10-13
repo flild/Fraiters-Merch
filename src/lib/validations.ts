@@ -7,7 +7,7 @@ export const orderFormSchema = z.object({
   city: z.string().min(2, { message: 'Укажите город' }),
   address: z.string().min(5, { message: 'Укажите точный адрес' }),
   postalCode: z.string().min(6, { message: 'Укажите почтовый индекс' }),
-  deliveryMethod: z.enum(['cdek', 'post', 'shelf']),
+  deliveryMethod: z.enum(['cdek', 'post']),
   paymentMethod: z.enum(['card', 'sbp']),
   comment: z.string().optional(),
 });

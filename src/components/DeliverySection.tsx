@@ -90,30 +90,6 @@ export default function DeliverySection() {
               </div>
             </div>
           </div>
-
-          {/* Shelves pickup */}
-          <div className="bg-card rounded-xl border border-border p-6 flex flex-col hover:border-primary/50 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-primary-950/40 border border-primary-800/40 text-primary-500 flex items-center justify-center mb-5">
-              <MapPin className="w-6 h-6" />
-            </div>
-            <div className="text-xs font-mono uppercase text-primary-400 mb-1">
-              Самовывоз день в день
-            </div>
-            <h3 className="text-lg font-bold text-white mb-2">Полочки в магазинах</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed mb-4 flex-1">
-              Бесплатно! Приходите в партнерский магазин в Москве, Санкт-Петербурге, Казани или Екатеринбурге и забирайте сразу.
-            </p>
-            <div className="pt-4 border-t border-border space-y-1.5 text-xs font-mono">
-              <div className="flex justify-between text-muted-foreground">
-                <span>Сроки:</span>
-                <span className="font-bold text-white">Сегодня</span>
-              </div>
-              <div className="flex justify-between text-muted-foreground">
-                <span>Стоимость:</span>
-                <span className="font-bold text-primary-400 tabular-nums">0 ₽</span>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Interactive Delivery Estimator */}

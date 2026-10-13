@@ -1,4 +1,4 @@
-import { Product, ShelfLocation, Review, FaqItem, OrderRecord } from '@/types';
+import { Product, Review, FaqItem, OrderRecord } from '@/types';
 
 export const CATEGORIES = [
   { id: 'all', label: 'Весь мерч' },
@@ -148,7 +148,6 @@ export const PRODUCTS: Product[] = [
     oldPrice: 5500,
     inStock: true,
     stockCount: 6,
-    badge: 'Дроп ограничен',
     image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-neutral-900 via-red-950 to-black',
     description: 'Плотное оверсайз худи из футера 3-нитки с начесом. Шелкографическая печать на спине и вышивка на груди. Глубокий капюшон.',
@@ -174,56 +173,6 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
-export const SHELF_LOCATIONS: ShelfLocation[] = [
-  {
-    id: 'shelf-msk-1',
-    city: 'Москва',
-    storeName: '«Твоя Полка» на Китай-Городе',
-    address: 'ул. Маросейка, д. 6-8, стр. 1 (вход со двора)',
-    metro: 'м. Китай-город (2 мин пешком)',
-    shelfNumber: 'Полка № 42 (средний ярус)',
-    workingHours: 'Ежедневно с 11:00 до 21:00',
-    statusText: 'Пополнение мерча: 28 сентября',
-    itemsAvailable: ['Акриловые стенды', 'Брелоки', 'Стикерпаки', 'Открытки'],
-    yandexMapUrl: 'https://yandex.ru/maps/?text=Твоя+Полка+Маросейка+6-8',
-  },
-  {
-    id: 'shelf-spb-1',
-    city: 'Санкт-Петербург',
-    storeName: '«Полка Чудес» в Севкабель Порту',
-    address: 'Кожевенная линия, д. 40, Главное здание, 2 этаж',
-    metro: 'м. Приморская / Василеостровская',
-    shelfNumber: 'Полка № B-14',
-    workingHours: 'Пн-Вс с 12:00 до 22:00',
-    statusText: 'В наличии все стенды и новинки',
-    itemsAvailable: ['Диорамы', 'Стенды', 'Голографические брелоки', 'Пины'],
-    yandexMapUrl: 'https://yandex.ru/maps/?text=Полка+Чудес+Севкабель+Порт',
-  },
-  {
-    id: 'shelf-ekb-1',
-    city: 'Екатеринбург',
-    storeName: 'Магазин «Craft Corner»',
-    address: 'ул. Вайнера, д. 10, ТЦ «Успенский», 3 этаж',
-    metro: 'м. Площадь 1905 года',
-    shelfNumber: 'Полка № 8',
-    workingHours: 'Ежедневно с 10:00 до 21:00',
-    statusText: 'Осталось несколько стендов и стикеры',
-    itemsAvailable: ['Стикерпаки', 'Значки', 'Брелоки'],
-    yandexMapUrl: 'https://yandex.ru/maps/?text=Вайнера+10+Екатеринбург',
-  },
-  {
-    id: 'shelf-kzn-1',
-    city: 'Казань',
-    storeName: 'Арт-пространство «КрафтЛавка»',
-    address: 'ул. Баумана, д. 29, арка во двор',
-    metro: 'м. Кремлёвская',
-    shelfNumber: 'Полка № 19',
-    workingHours: 'Ежедневно с 11:00 до 20:00',
-    statusText: 'Свежий завоз от 25 сентября',
-    itemsAvailable: ['Стенды', 'Стикеры', 'Открытки', 'Брелоки'],
-    yandexMapUrl: 'https://yandex.ru/maps/?text=Казань+Баумана+29',
-  },
-];
 
 export const REVIEWS: Review[] = [
   {
@@ -282,11 +231,6 @@ export const FAQ_LIST: FaqItem[] = [
     id: 'faq-2',
     question: 'Как защищены товары при доставке?',
     answer: 'Каждый акриловый стенд и брелок покрыт защитной пленкой с двух сторон. Заказ упаковывается в пузырчатую пленку (bubble wrap) в несколько слоев, прокладывается жестким крафтовым картоном и помещается в ударопрочный курьер-пакет или коробку.',
-  },
-  {
-    id: 'faq-3',
-    question: 'Что такое «Полочки» и можно ли купить мерч вживую?',
-    answer: 'Полочки — это партнерские витрины в магазинах крафта и комиксов в Москве, Санкт-Петербурге, Екатеринбурге и Казани. Вы можете прийти в магазин в рабочие часы, посмотреть мерч вживую и сразу купить его на кассе магазина без ожидания доставки.',
   },
   {
     id: 'faq-4',
@@ -380,7 +324,7 @@ export const INITIAL_ORDERS: OrderRecord[] = [
       city: 'Казань',
       address: 'ул. Баумана, д. 22',
       postalCode: '420111',
-      deliveryMethod: 'shelf',
+      deliveryMethod: 'cdek',
       paymentMethod: 'card',
     },
     items: [
@@ -441,7 +385,7 @@ export const INITIAL_ORDERS: OrderRecord[] = [
       city: 'Санкт-Петербург',
       address: 'Полочка «Полка Чудес»',
       postalCode: '190000',
-      deliveryMethod: 'shelf',
+      deliveryMethod: 'cdek',
       paymentMethod: 'card',
     },
     items: [

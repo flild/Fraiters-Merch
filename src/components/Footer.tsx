@@ -18,7 +18,6 @@ export default function Footer() {
 
   const navLinks = [
     { href: '/catalog', label: 'Каталог мерча' },
-    { href: '/shelves', label: 'Полочки в городах' },
     { href: '/delivery', label: 'Доставка и оплата' },
     { href: '/reviews', label: 'Отзывы покупателей' },
     { href: '/faq', label: 'Частые вопросы' },

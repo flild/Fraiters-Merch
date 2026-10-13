@@ -1,6 +1,6 @@
 export type ProductCategory = 'all' | 'stands' | 'keychains' | 'stickers' | 'pins' | 'apparel' | 'prints';
 
-export type AppSection = 'home' | 'catalog' | 'shelves' | 'delivery' | 'reviews' | 'faq' | 'admin';
+export type AppSection = 'home' | 'catalog' | 'delivery' | 'reviews' | 'faq' | 'admin';
 
 export type ViewMode = 'sections' | 'full';
 
@@ -38,18 +38,6 @@ export interface CartItem {
   selectedOption?: string;
 }
 
-export interface ShelfLocation {
-  id: string;
-  city: string;
-  storeName: string;
-  address: string;
-  metro?: string;
-  shelfNumber: string;
-  workingHours: string;
-  statusText: string;
-  itemsAvailable: string[];
-  yandexMapUrl?: string;
-}
 
 export interface Review {
   id: string;
@@ -76,7 +64,7 @@ export interface OrderFormValues {
   city: string;
   address: string;
   postalCode: string;
-  deliveryMethod: 'cdek' | 'post' | 'shelf';
+  deliveryMethod: 'cdek' | 'post';
   paymentMethod: 'card' | 'sbp';
   comment?: string;
 }
