@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, OrderFormValues, AppSection, ViewMode, OrderRecord, ShelfLocation } from '@/types';
-import { PRODUCTS as INITIAL_PRODUCTS, SHELF_LOCATIONS as INITIAL_SHELVES, INITIAL_ORDERS } from './data';
+import { Product, CartItem, OrderFormValues, AppSection, ViewMode, OrderRecord } from '@/types';
+import { PRODUCTS as INITIAL_PRODUCTS, INITIAL_ORDERS } from './data';
 
 interface CartContextType {
   cart: CartItem[];
@@ -16,8 +16,8 @@ interface CartContextType {
   totalPrice: number;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
-  selectedDelivery: 'cdek' | 'post' | 'shelf';
-  setSelectedDelivery: (method: 'cdek' | 'post' | 'shelf') => void;
+  selectedDelivery: 'cdek' | 'post';
+  setSelectedDelivery: (method: 'cdek' | 'post') => void;
   quickViewProduct: Product | null;
   setQuickViewProduct: (product: Product | null) => void;
   lastOrder: OrderRecord | null;
@@ -34,12 +34,7 @@ interface CartContextType {
   deleteProduct: (id: string) => void;
   resetProducts: () => void;
 
-  // Admin Shelves Management
-  shelves: ShelfLocation[];
-  addShelf: (shelf: ShelfLocation) => void;
-  updateShelf: (id: string, updated: Partial<ShelfLocation>) => void;
-  deleteShelf: (id: string) => void;
-  resetShelves: () => void;
+
 
   // Admin Orders Management
   orders: OrderRecord[];
@@ -89,20 +84,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Since we want sqlite to be the source of truth, we probably should remove localstorage for products
   // For now let's just use state that gets seeded from the API
 
-  // Dynamic shelves list from localStorage
-  const [shelves, setShelves] = useState<ShelfLocation[]>(() => {
-    if (typeof window === 'undefined') return INITIAL_SHELVES;
-    try {
-      const saved = localStorage.getItem('fraiters_merch_shelves');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // Ignore
-    }
-    return INITIAL_SHELVES;
-  });
+
 
   // Orders list from localStorage
   const [orders, setOrders] = useState<OrderRecord[]>(() => {
@@ -120,7 +102,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [selectedDelivery, setSelectedDelivery] = useState<'cdek' | 'post' | 'shelf'>('cdek');
+  const [selectedDelivery, setSelectedDelivery] = useState<'cdek' | 'post'>('cdek');
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [lastOrder, setLastOrder] = useState<OrderRecord | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -135,14 +117,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cart]);
 
-  // Sync shelves to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('fraiters_merch_shelves', JSON.stringify(shelves));
-    } catch {
-      // Ignore
-    }
-  }, [shelves]);
+
 
   // Sync orders to localStorage
   useEffect(() => {
@@ -199,7 +174,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
   const deliveryCost =
-    selectedDelivery === 'shelf' ? 0 : selectedDelivery === 'post' ? 350 : 420;
+    selectedDelivery === 'post' ? 350 : 420;
 
   const totalPrice = subtotal + (cart.length > 0 ? deliveryCost : 0);
 
@@ -284,27 +259,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Shelf Admin actions
-  const addShelf = (shelf: ShelfLocation) => {
-    setShelves((prev) => [shelf, ...prev]);
-    showToast(`Полочка в городе ${shelf.city} добавлена!`);
-  };
-
-  const updateShelf = (id: string, updated: Partial<ShelfLocation>) => {
-    setShelves((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, ...updated } : s))
-    );
-    showToast('Данные полочки обновлены');
-  };
-
-  const deleteShelf = (id: string) => {
-    setShelves((prev) => prev.filter((s) => s.id !== id));
-    showToast('Полочка удалена');
-  };
-
-  const resetShelves = () => {
-    setShelves(INITIAL_SHELVES);
-    showToast('Список полочек сброшен к исходному');
-  };
 
   // Order Admin actions
   const updateOrderStatus = (orderId: string, status: OrderRecord['status']) => {
@@ -356,12 +310,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         deleteProduct,
         resetProducts,
 
-        // Shelves
-        shelves,
-        addShelf,
-        updateShelf,
-        deleteShelf,
-        resetShelves,
+
 
         // Orders
         orders,

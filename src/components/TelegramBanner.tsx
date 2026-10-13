@@ -24,7 +24,7 @@ export default function TelegramBanner() {
               </div>
 
               <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight uppercase">
-                Все дропы и закрытые предзаказы — в Telegram <span className="text-primary-500 font-mono">@fraiters</span>
+                Все новинки и обновления — в Telegram <span className="text-primary-500 font-mono">@fraiters</span>
               </h2>
 
               <p className="text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">

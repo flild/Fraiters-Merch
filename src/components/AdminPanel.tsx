@@ -9,7 +9,7 @@ import {
   ShoppingBag, Calendar, Truck
 } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
-import { Product, ProductCategory, ShelfLocation, OrderRecord, CartItem } from '@/types';
+import { Product, ProductCategory, OrderRecord, CartItem } from '@/types';
 import { CATEGORIES } from '@/lib/data';
 
 import Link from 'next/link';
@@ -17,11 +17,11 @@ import Link from 'next/link';
 export default function AdminPanel() {
   const { 
     products, addProduct, updateProduct, deleteProduct, resetProducts,
-    shelves, addShelf, updateShelf, deleteShelf, resetShelves,
+
     orders, updateOrderStatus, clearOrders, seedDemoOrders,
   } = useCart();
 
-  const [activeAdminTab, setActiveAdminTab] = useState<'stats' | 'products' | 'shelves' | 'orders' | 'settings'>('stats');
+  const [activeAdminTab, setActiveAdminTab] = useState<'stats' | 'products' | 'orders' | 'settings'>('stats');
   
   // Search & Filter in Products
   const [productSearch, setProductSearch] = useState('');
@@ -30,10 +30,6 @@ export default function AdminPanel() {
   // Product Edit Modal State
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isNewProduct, setIsNewProduct] = useState(false);
-
-  // Shelf Edit Modal State
-  const [editingShelf, setEditingShelf] = useState<ShelfLocation | null>(null);
-  const [isNewShelf, setIsNewShelf] = useState(false);
 
   // Quick edit inline prices
   const [inlinePrices, setInlinePrices] = useState<Record<string, number>>({});
@@ -60,7 +56,7 @@ export default function AdminPanel() {
     const deliveryStatsMap: Record<string, { count: number; name: string }> = {
       cdek: { count: 0, name: 'СДЭК (ПВЗ/Курьер)' },
       post: { count: 0, name: 'Почта России' },
-      shelf: { count: 0, name: 'Полочка (Самовывоз)' },
+
     };
     const statusStatsMap: Record<string, number> = {
       new: 0,
@@ -175,40 +171,14 @@ export default function AdminPanel() {
     setIsNewProduct(false);
   };
 
-  const handleOpenAddShelf = () => {
-    const newShelf: ShelfLocation = {
-      id: `shelf-${Date.now()}`,
-      city: 'Москва',
-      storeName: '«Магазин мерча»',
-      address: 'ул. Центральная, д. 1',
-      shelfNumber: 'Полка № 1',
-      workingHours: '10:00 – 21:00',
-      statusText: 'Свежее пополнение',
-      itemsAvailable: ['Стенды', 'Брелоки', 'Стикеры'],
-      yandexMapUrl: 'https://yandex.ru/maps/',
-    };
-    setEditingShelf(newShelf);
-    setIsNewShelf(true);
-  };
 
-  const handleSaveShelf = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingShelf) return;
 
-    if (isNewShelf) {
-      addShelf(editingShelf);
-    } else {
-      updateShelf(editingShelf.id, editingShelf);
-    }
-    setEditingShelf(null);
-    setIsNewShelf(false);
-  };
+
 
   // Export JSON
   const handleExportData = () => {
     const exportData = {
       products,
-      shelves,
       orders,
       exportedAt: new Date().toISOString(),
     };
@@ -255,7 +225,7 @@ export default function AdminPanel() {
               Управление магазином
             </h1>
             <p className="text-xs text-muted-foreground mt-1">
-              Редактируйте товары, меняйте цены, обновляйте полочки и отслеживайте поступившие заказы.
+              Редактируйте товары, меняйте цены и отслеживайте поступившие заказы.
             </p>
           </div>
 
@@ -298,17 +268,7 @@ export default function AdminPanel() {
             <span>Товары и цены ({products.length})</span>
           </button>
 
-          <button
-            onClick={() => setActiveAdminTab('shelves')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeAdminTab === 'shelves'
-                ? 'bg-primary text-white shadow-md shadow-red-950'
-                : 'bg-card text-muted-foreground hover:text-white border border-border'
-            }`}
-          >
-            <MapPin className="w-4 h-4" />
-            <span>Полочки в городах ({shelves.length})</span>
-          </button>
+
 
           <button
             onClick={() => setActiveAdminTab('orders')}
@@ -347,7 +307,7 @@ export default function AdminPanel() {
                 </div>
                 <h2 className="text-lg font-bold text-white">Статистика продаж Fraiters Merch</h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Данные основаны на всех заказах, оформленных через интернет-витрину и партнерские полочки.
+                  Данные основаны на всех заказах, оформленных через интернет-витрину.
                 </p>
               </div>
 
@@ -388,7 +348,7 @@ export default function AdminPanel() {
                   <span className="text-emerald-400 font-medium font-mono flex items-center">
                     <TrendingUp className="w-3 h-3 mr-0.5" /> +18.4%
                   </span>
-                  <span className="text-muted-foreground">к прошлому дропу</span>
+
                 </div>
               </div>
 
@@ -919,73 +879,7 @@ export default function AdminPanel() {
           </div>
         )}
 
-        {/* ----------------- TAB 2: SHELVES ----------------- */}
-        {activeAdminTab === 'shelves' && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between bg-card p-4 rounded-xl border border-border">
-              <div>
-                <div className="font-bold text-white text-sm">Офлайн витрины в городах</div>
-                <div className="text-xs text-muted-foreground">Добавляйте адреса новых полочек или меняйте даты завозов.</div>
-              </div>
-              <button
-                onClick={handleOpenAddShelf}
-                className="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary-500 text-white text-xs font-semibold rounded-lg shadow-md transition-colors cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Добавить полочку</span>
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {shelves.map((s) => (
-                <div key={s.id} className="bg-card rounded-xl border border-border p-5 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-mono font-bold text-primary-400 bg-primary-950/60 px-2.5 py-0.5 rounded">
-                        {s.city}
-                      </span>
-                      <span className="text-xs font-mono font-bold text-white bg-muted px-2 py-0.5 rounded">
-                        {s.shelfNumber}
-                      </span>
-                    </div>
-                    <div className="text-sm font-bold text-white mb-1">{s.storeName}</div>
-                    <div className="text-xs text-muted-foreground mb-2">{s.address}</div>
-                    <div className="text-xs font-mono text-emerald-400 bg-emerald-950/30 p-2 rounded mb-3">
-                      {s.statusText}
-                    </div>
-                    <div className="text-[11px] text-muted-foreground">
-                      Товары: {s.itemsAvailable.join(', ')}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 mt-4 border-t border-border flex items-center justify-end gap-2">
-                    <button
-                      onClick={() => {
-                        setEditingShelf({ ...s });
-                        setIsNewShelf(false);
-                      }}
-                      className="px-3 py-1.5 bg-card hover:bg-muted text-xs text-white rounded transition-colors"
-                    >
-                      Редактировать
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (confirm(`Удалить полочку ${s.storeName}?`)) {
-                          deleteShelf(s.id);
-                        }
-                      }}
-                      className="px-3 py-1.5 bg-card hover:bg-primary-950 text-xs text-primary-400 rounded transition-colors"
-                    >
-                      Удалить
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ----------------- TAB 3: ORDERS ----------------- */}
+        {/* ----------------- TAB 2: ORDERS ----------------- */}
         {activeAdminTab === 'orders' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between bg-card p-4 rounded-xl border border-border">
@@ -1126,7 +1020,7 @@ export default function AdminPanel() {
                   onClick={() => {
                     if (confirm('Сбросить весь каталог товаров к стандартным позициям?')) {
                       resetProducts();
-                      resetShelves();
+
                     }
                   }}
                   className="flex items-center gap-2 px-4 py-2.5 bg-card hover:bg-primary-950/60 border border-primary-900/60 text-xs font-semibold text-primary-400 rounded-lg transition-colors cursor-pointer ml-auto"
@@ -1399,94 +1293,6 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* ----------------- SHELF EDIT MODAL ----------------- */}
-      {editingShelf && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div className="relative w-full max-w-lg bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-border mb-6">
-              <h2 className="text-lg font-bold text-white">
-                {isNewShelf ? 'Добавить полочку' : 'Редактировать полочку'}
-              </h2>
-              <button onClick={() => setEditingShelf(null)} className="p-1 text-muted-foreground hover:text-white">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveShelf} className="space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-muted-foreground mb-1 font-medium">Город *</label>
-                  <input
-                    type="text"
-                    required
-                    value={editingShelf.city}
-                    onChange={(e) => setEditingShelf({ ...editingShelf, city: e.target.value })}
-                    className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-muted-foreground mb-1 font-medium">Номер полки *</label>
-                  <input
-                    type="text"
-                    required
-                    value={editingShelf.shelfNumber}
-                    onChange={(e) => setEditingShelf({ ...editingShelf, shelfNumber: e.target.value })}
-                    className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-muted-foreground mb-1 font-medium">Название магазина *</label>
-                <input
-                  type="text"
-                  required
-                  value={editingShelf.storeName}
-                  onChange={(e) => setEditingShelf({ ...editingShelf, storeName: e.target.value })}
-                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-muted-foreground mb-1 font-medium">Точный адрес *</label>
-                <input
-                  type="text"
-                  required
-                  value={editingShelf.address}
-                  onChange={(e) => setEditingShelf({ ...editingShelf, address: e.target.value })}
-                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-muted-foreground mb-1 font-medium">Статус завоза</label>
-                <input
-                  type="text"
-                  value={editingShelf.statusText}
-                  onChange={(e) => setEditingShelf({ ...editingShelf, statusText: e.target.value })}
-                  className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500"
-                />
-              </div>
-
-              <div className="pt-4 border-t border-border flex items-center justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setEditingShelf(null)}
-                  className="px-4 py-2 text-xs text-muted-foreground hover:text-white"
-                >
-                  Отмена
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 text-xs font-semibold text-white bg-primary hover:bg-primary-500 rounded-lg transition-colors cursor-pointer"
-                >
-                  Сохранить
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
     </div>
   );
