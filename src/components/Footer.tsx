@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { Send, Heart, ArrowUp } from 'lucide-react';
+import { siteConfig } from '@/lib/config';
 
 export default function Footer() {
   const [clickCount, setClickCount] = useState(0);
@@ -53,18 +54,18 @@ export default function Footer() {
               )}
             </motion.div>
             <p className="text-muted-foreground max-w-sm text-xs leading-relaxed">
-              Официальный магазин мерча паблика Fraiters. Акриловые стенды, диорамы,
+              Официальный магазин мерча паблика {siteConfig.siteName}. Акриловые стенды, диорамы,
               голографические брелоки, открытки и одежда с доставкой по всей России и витринами в арт-шопах.
             </p>
             <div className="pt-2">
               <a
-                href="https://t.me/fraiters"
+                href={siteConfig.telegramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3.5 py-2 bg-card border border-border hover:border-primary text-white rounded-lg transition-colors font-mono"
               >
                 <Send className="w-3.5 h-3.5 text-primary-500" />
-                <span>t.me/fraiters</span>
+                <span>{siteConfig.telegramUrl.replace(/^https?:\/\//, '')}</span>
               </a>
             </div>
           </div>
@@ -99,12 +100,12 @@ export default function Footer() {
             <div className="pt-2 text-[11px] text-muted-foreground">
               По вопросам оптовых заказов, маркетов и предложений пишите в ЛС Telegram:{' '}
               <a
-                href="https://t.me/fraiters"
+                href={siteConfig.telegramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary-400 hover:underline"
               >
-                @fraiters
+                {siteConfig.telegramHandle}
               </a>
             </div>
           </div>

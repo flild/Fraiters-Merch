@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Star, Send, CheckCircle2, MessageSquarePlus } from 'lucide-react';
 import { REVIEWS } from '@/lib/data';
 import { Review } from '@/types';
+import { siteConfig } from '@/lib/config';
 
 export default function ReviewsSection() {
   const [reviewsList, setReviewsList] = useState<Review[]>(REVIEWS);
@@ -63,7 +64,7 @@ export default function ReviewsSection() {
               Отзывы о мерче
             </h2>
             <p className="text-muted-foreground text-sm sm:text-base mt-1 max-w-xl">
-              Фотографии, распаковки и впечатления подписчиков канала Fraiters.
+              Фотографии, распаковки и впечатления подписчиков канала {siteConfig.siteName.split(' ')[0]}.
               Читайте отзывы и делитесь своими покупками.
             </p>
           </div>
@@ -79,7 +80,7 @@ export default function ReviewsSection() {
             </button>
 
             <a
-              href="https://t.me/fraiters"
+              href={siteConfig.telegramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2.5 text-xs font-semibold text-white bg-primary hover:bg-primary-500 rounded-lg transition-all shadow-md shadow-red-950 flex items-center gap-2"

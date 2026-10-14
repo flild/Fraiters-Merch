@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, HelpCircle, Send } from 'lucide-react';
 import { FAQ_LIST } from '@/lib/data';
+import { siteConfig } from '@/lib/config';
 
 export default function FaqSection() {
   const [openIds, setOpenIds] = useState<Record<string, boolean>>({
@@ -72,13 +73,13 @@ export default function FaqSection() {
         <div className="mt-8 text-center text-xs text-muted-foreground">
           Остались вопросы? Напишите автору напрямую в паблик:{' '}
           <a
-            href="https://t.me/fraiters"
+            href={siteConfig.telegramUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-400 hover:text-primary-300 font-medium inline-flex items-center gap-1 underline underline-offset-2"
           >
             <Send className="w-3 h-3" />
-            t.me/fraiters
+            {siteConfig.telegramUrl.replace(/^https?:\/\//, '')}
           </a>
         </div>
 

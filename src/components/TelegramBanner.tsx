@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Send, Bell, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
+import { siteConfig } from '@/lib/config';
 
 export default function TelegramBanner() {
   return (
@@ -24,7 +25,7 @@ export default function TelegramBanner() {
               </div>
 
               <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight uppercase">
-                Все новинки и обновления — в Telegram <span className="text-primary-500 font-mono">@fraiters</span>
+                Все новинки и обновления — в Telegram <span className="text-primary-500 font-mono">{siteConfig.telegramHandle}</span>
               </h2>
 
               <p className="text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
@@ -46,13 +47,13 @@ export default function TelegramBanner() {
 
             <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-stretch gap-3">
               <a
-                href="https://t.me/fraiters"
+                href={siteConfig.telegramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-3 px-6 py-4 text-sm font-bold text-white bg-primary hover:bg-primary-500 rounded-xl transition-all shadow-xl shadow-red-950/60 active:scale-95 text-center group"
               >
                 <Send className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                <span>Перейти в @fraiters</span>
+                <span>Перейти в {siteConfig.telegramHandle}</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 

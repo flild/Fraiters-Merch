@@ -6,6 +6,7 @@ import { X, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { OrderFormValues } from '@/types';
 import { orderFormSchema } from '@/lib/validations';
+import { siteConfig } from '@/lib/config';
 import { CartItemList } from './cart/CartItemList';
 import { CartCheckoutForm } from './cart/CartCheckoutForm';
 
@@ -60,7 +61,7 @@ export default function CartDrawer() {
     const deliveryName =
       selectedDelivery === 'cdek' ? 'СДЭК до ПВЗ' : 'Почта России 1-й класс';
 
-    return `Привет! Хочу оформить заказ мерча Fraiters (${orderId}):
+    return `Привет! Хочу оформить заказ мерча ${siteConfig.siteName.split(' ')[0]} (${orderId}):
 \n${itemsText}
 \nСпособ доставки: ${deliveryName} (${deliveryCost} ₽)
 Итого к оплате: ${totalPrice.toLocaleString('ru-RU')} ₽
@@ -75,7 +76,8 @@ ${formData.comment ? `Комментарий: ${formData.comment}` : ''}`;
     const text = generateOrderMessage();
     const encoded = encodeURIComponent(text);
     submitOrder(formData);
-    window.open(`https://t.me/fraiters?text=${encoded}`, '_blank');
+    const tgUsername = siteConfig.telegramHandle.replace('@', '');
+    window.open(`https://t.me/${tgUsername}?text=${encoded}`, '_blank');
   };
 
   const handleWebsiteSubmit = (e: React.FormEvent) => {

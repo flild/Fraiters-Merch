@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, Send, Menu, X, ShieldCheck, Settings } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
+import { siteConfig } from '@/lib/config';
 
 export default function Navbar() {
   const { totalItems, subtotal, setIsCartOpen } = useCart();
@@ -83,14 +84,14 @@ export default function Navbar() {
             <motion.a
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
-              href="https://t.me/fraiters"
+              href={siteConfig.telegramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-white bg-card border border-border/80 hover:border-primary/70 hover:bg-muted/90 rounded-lg transition-all"
-              title="Перейти в Telegram-канал @fraiters"
+              title={`Перейти в Telegram-канал ${siteConfig.telegramHandle}`}
             >
               <Send className="w-3.5 h-3.5 text-primary-500 shrink-0" />
-              <span className="hidden sm:inline font-mono">@fraiters</span>
+              <span className="hidden sm:inline font-mono">{siteConfig.telegramHandle}</span>
               <span className="sm:hidden font-mono">TG</span>
             </motion.a>
 
@@ -164,13 +165,13 @@ export default function Navbar() {
 
               <div className="pt-3 border-t border-border flex items-center justify-between">
                 <a
-                  href="https://t.me/fraiters"
+                  href={siteConfig.telegramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs font-mono text-primary-400 hover:underline flex items-center gap-1.5"
                 >
                   <Send className="w-3 h-3" />
-                  Telegram @fraiters
+                  Telegram {siteConfig.telegramHandle}
                 </a>
                 <span className="text-[11px] text-muted-foreground flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3 text-emerald-500" /> Официальный мерч
