@@ -4,6 +4,7 @@ import React from 'react';
 import { CheckCircle2, Send, Copy, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { CartItem } from "@/types";
 import { useCart } from '@/lib/cart-context';
+import { siteConfig } from '@/lib/config';
 
 export default function OrderSuccessModal() {
   const { lastOrder, closeOrderSuccess } = useCart();
@@ -19,9 +20,10 @@ export default function OrderSuccessModal() {
 
   const openTelegramWithOrder = () => {
     const text = encodeURIComponent(
-      `Здравствуйте! Я оформил заказ #${lastOrder.id} на сайте Fraiters Merch на сумму ${lastOrder.total.toLocaleString('ru-RU')} ₽. Имя: ${lastOrder.values.fullName || '—'}. Хочу подтвердить и оплатить.`
+      `Здравствуйте! Я оформил заказ #${lastOrder.id} на сайте ${siteConfig.siteName} на сумму ${lastOrder.total.toLocaleString('ru-RU')} ₽. Имя: ${lastOrder.values.fullName || '—'}. Хочу подтвердить и оплатить.`
     );
-    window.open(`https://t.me/fraiters?text=${text}`, '_blank');
+    const tgUsername = siteConfig.telegramHandle.replace('@', '');
+    window.open(`https://t.me/${tgUsername}?text=${text}`, '_blank');
   };
 
   return (
@@ -96,7 +98,7 @@ export default function OrderSuccessModal() {
             className="w-full py-3.5 px-4 text-xs font-bold text-white bg-primary hover:bg-primary-500 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-red-950 transition-all cursor-pointer"
           >
             <Send className="w-4 h-4" />
-            <span>Подтвердить в Telegram @fraiters</span>
+            <span>Подтвердить в Telegram {siteConfig.telegramHandle}</span>
           </button>
 
           <button

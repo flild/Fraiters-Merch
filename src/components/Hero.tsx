@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { Flame, Send, ArrowRight, Sparkles, MapPin, PackageCheck, Layers, Store, Truck, MessageSquare } from 'lucide-react';
+import { siteConfig } from '@/lib/config';
 
 export default function Hero() {
 
@@ -37,7 +38,7 @@ export default function Hero() {
             <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground mb-4">
               <span className="text-primary-500 font-semibold tracking-wide uppercase">Официальный магазин</span>
               <span aria-hidden="true">·</span>
-              <span>Telegram: @fraiters</span>
+              <span>Telegram: {siteConfig.telegramHandle}</span>
               <span aria-hidden="true">·</span>
 
             </div>
@@ -46,7 +47,7 @@ export default function Hero() {
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase font-sans leading-[1.08] text-balance mb-5">
               Авторский мерч <br className="hidden sm:inline" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-red-400">
-                Fraiters
+                {siteConfig.siteName.split(' ')[0]}
               </span>{' '}
               в деталях
             </h1>
@@ -76,7 +77,7 @@ export default function Hero() {
               <motion.a
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.96 }}
-                href="https://t.me/fraiters"
+                href={siteConfig.telegramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-medium text-muted-foreground hover:text-white bg-transparent hover:bg-card/50 border border-transparent hover:border-border rounded-lg transition-all"
@@ -228,12 +229,12 @@ export default function Hero() {
                   <Send className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="font-semibold text-white">Паблик авторов Fraiters</div>
-                  <div className="text-muted-foreground text-[11px]">t.me/fraiters — спойлеры, процессы и арты</div>
+                  <div className="font-semibold text-white">Паблик авторов {siteConfig.siteName.split(' ')[0]}</div>
+                  <div className="text-muted-foreground text-[11px]">{siteConfig.telegramUrl.replace(/^https?:\/\//, '')} — спойлеры, процессы и арты</div>
                 </div>
               </div>
               <a
-                href="https://t.me/fraiters"
+                href={siteConfig.telegramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3 py-1.5 bg-muted hover:bg-primary text-white font-medium rounded-md transition-colors shrink-0 font-mono text-[11px]"

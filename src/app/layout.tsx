@@ -8,35 +8,36 @@ import OrderSuccessModal from '@/components/OrderSuccessModal';
 import Footer from '@/components/Footer';
 import PageTransition from '@/components/PageTransition';
 import ScrollToTop from '@/components/ScrollToTop';
+import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'FRAITERS MERCH — Официальный магазин авторского мерча',
-  description: 'Коллекционный мерч от Fraiters: двусторонние акриловые стенды, диорамы, голографические брелоки, виниловые стикерпаки и оверсайз худи. Доставка СДЭК и Почтой РФ.',
-  keywords: ['Fraiters', 'мерч', 'акриловый стенд', 'брелок', 'стикеры', 'худи', 'аниме мерч', 'тгк fraiters'],
-  authors: [{ name: 'Fraiters' }],
-  creator: 'Fraiters',
-  publisher: 'Fraiters Merch',
+  title: `${siteConfig.siteName.toUpperCase()} — Официальный магазин авторского мерча`,
+  description: `Коллекционный мерч от ${siteConfig.siteName.split(' ')[0]}: двусторонние акриловые стенды, диорамы, голографические брелоки, виниловые стикерпаки и оверсайз худи. Доставка СДЭК и Почтой РФ.`,
+  keywords: [siteConfig.siteName.split(' ')[0], 'мерч', 'акриловый стенд', 'брелок', 'стикеры', 'худи', 'аниме мерч', `тгк ${siteConfig.telegramHandle}`],
+  authors: [{ name: siteConfig.siteName.split(' ')[0] }],
+  creator: siteConfig.siteName.split(' ')[0],
+  publisher: siteConfig.siteName,
   robots: 'index, follow',
   openGraph: {
-    title: 'FRAITERS MERCH — Коллекционный мерч и аксессуары',
-    description: 'Оригинальные акриловые стенды, брелоки, открытки и худи от Fraiters. Заказывайте с доставкой по РФ и СНГ.',
+    title: `${siteConfig.siteName.toUpperCase()} — Коллекционный мерч и аксессуары`,
+    description: `Оригинальные акриловые стенды, брелоки, открытки и худи от ${siteConfig.siteName.split(' ')[0]}. Заказывайте с доставкой по РФ и СНГ.`,
     type: 'website',
     locale: 'ru_RU',
-    siteName: 'FRAITERS MERCH',
+    siteName: siteConfig.siteName,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FRAITERS MERCH — Коллекционный мерч и аксессуары',
-    description: 'Официальный магазин мерча Fraiters. Доставка по РФ и СНГ, витрины в Москве, СПб, Казани и Екб.',
+    title: `${siteConfig.siteName.toUpperCase()} — Коллекционный мерч и аксессуары`,
+    description: `Официальный магазин мерча ${siteConfig.siteName.split(' ')[0]}. Доставка по РФ и СНГ, витрины в Москве, СПб, Казани и Екб.`,
   },
 };
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'OnlineStore',
-  name: 'FRAITERS MERCH',
-  description: 'Официальный интернет-магазин авторского мерча и аксессуаров Fraiters.',
-  url: 'https://t.me/fraiters',
+  name: siteConfig.siteName,
+  description: `Официальный интернет-магазин авторского мерча и аксессуаров ${siteConfig.siteName.split(' ')[0]}.`,
+  url: siteConfig.telegramUrl,
   currenciesAccepted: 'RUB',
   paymentAccepted: 'Card, SBP',
   priceRange: '290 - 4900 RUB',

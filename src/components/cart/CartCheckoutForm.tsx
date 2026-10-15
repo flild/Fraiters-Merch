@@ -1,6 +1,7 @@
 import React from 'react';
 import { Send, Check } from 'lucide-react';
 import { OrderFormValues } from '@/types';
+import { siteConfig } from '@/lib/config';
 
 interface CartCheckoutFormProps {
   formData: OrderFormValues;
@@ -147,7 +148,7 @@ export function CartCheckoutForm({
           className="w-full py-3 px-4 text-xs font-bold text-white bg-muted hover:bg-muted-foreground border border-border hover:border-primary-500 rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
         >
           <Send className="w-4 h-4 text-primary-500" />
-          <span>Заказать в Telegram @fraiters</span>
+          <span>Заказать в Telegram {siteConfig.telegramHandle}</span>
         </button>
 
         {/* Option B: Standard checkout submission */}
