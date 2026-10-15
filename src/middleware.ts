@@ -10,8 +10,10 @@ export async function middleware(request: NextRequest) {
     const adminSessionCookie = request.cookies.get('admin_session');
     const correctPassword = process.env.ADMIN_PASSWORD;
 
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = '/admin/login';
+    // Берем реальный хост и протокол из заголовков Nginx
+    const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'localhost:3000';
+    const proto = request.headers.get('x-forwarded-proto') || 'http';
+    const loginUrl = new URL('/admin/login', `${proto}://${host}`);
 
     if (!correctPassword) {
       return NextResponse.redirect(loginUrl);
