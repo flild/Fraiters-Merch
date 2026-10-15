@@ -1,14 +1,18 @@
-import { Product, Review, FaqItem, OrderRecord } from '@/types';
+import { Product, Review, FaqItem, OrderRecord, CategoryItem } from '@/types';
 
-export const CATEGORIES = [
-  { id: 'all', label: 'Весь мерч' },
+export const DEFAULT_CATEGORIES: CategoryItem[] = [
   { id: 'stands', label: 'Акриловые стенды' },
   { id: 'keychains', label: 'Брелоки' },
   { id: 'stickers', label: 'Стикерпаки' },
   { id: 'pins', label: 'Значки' },
   { id: 'apparel', label: 'Одежда' },
   { id: 'prints', label: 'Открытки & Зины' },
-] as const;
+];
+
+export const UNCATEGORIZED_CATEGORY: CategoryItem = {
+  id: 'uncategorized',
+  label: 'Без категории',
+};
 
 export const PRODUCTS: Product[] = [
   {
@@ -19,7 +23,6 @@ export const PRODUCTS: Product[] = [
     price: 950,
     oldPrice: 1100,
     inStock: true,
-    stockCount: 8,
     badge: 'Хит продаж',
     image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-red-950 via-neutral-900 to-black',
@@ -35,7 +38,6 @@ export const PRODUCTS: Product[] = [
     categoryName: 'Акриловая диорама',
     price: 1350,
     inStock: true,
-    stockCount: 4,
     badge: 'Лимитированный тираж',
     image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-neutral-900 via-red-950 to-black',
@@ -51,7 +53,6 @@ export const PRODUCTS: Product[] = [
     categoryName: 'Брелок',
     price: 490,
     inStock: true,
-    stockCount: 19,
     badge: 'Новинка',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-red-900 via-neutral-900 to-black',
@@ -68,7 +69,6 @@ export const PRODUCTS: Product[] = [
     price: 450,
     oldPrice: 500,
     inStock: true,
-    stockCount: 12,
     image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-rose-950 via-neutral-950 to-black',
     description: 'Объемная эпоксидная линза с блестками внутри. Приятный тактильный купол, создающий глубину изображения.',
@@ -83,7 +83,6 @@ export const PRODUCTS: Product[] = [
     categoryName: 'Стикерпак',
     price: 350,
     inStock: true,
-    stockCount: 35,
     badge: 'Бестселлер',
     image: 'https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-red-950 via-zinc-950 to-black',
@@ -99,7 +98,6 @@ export const PRODUCTS: Product[] = [
     categoryName: 'Стикерпак',
     price: 290,
     inStock: true,
-    stockCount: 22,
     image: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-neutral-900 via-red-950 to-neutral-950',
     description: '6 крупных одиночных стикеров на голографической основе. Каждый стикер упакован в индивидуальный пакетик с хедером.',
@@ -114,7 +112,6 @@ export const PRODUCTS: Product[] = [
     categoryName: 'Пин / Значок',
     price: 550,
     inStock: true,
-    stockCount: 15,
     badge: 'Твердая эмаль',
     image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-zinc-900 via-red-950 to-black',
@@ -131,7 +128,6 @@ export const PRODUCTS: Product[] = [
     price: 320,
     oldPrice: 390,
     inStock: true,
-    stockCount: 28,
     image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-red-900 via-neutral-950 to-black',
     description: 'Набор из 3 металлических закатных значков с матовой ламинацией и надежной евробулавкой. Диаметр 44 мм.',
@@ -147,7 +143,6 @@ export const PRODUCTS: Product[] = [
     price: 4900,
     oldPrice: 5500,
     inStock: true,
-    stockCount: 6,
     image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-neutral-900 via-red-950 to-black',
     description: 'Плотное оверсайз худи из футера 3-нитки с начесом. Шелкографическая печать на спине и вышивка на груди. Глубокий капюшон.',
@@ -162,7 +157,6 @@ export const PRODUCTS: Product[] = [
     categoryName: 'Открытки',
     price: 400,
     inStock: true,
-    stockCount: 40,
     badge: 'Софт-тач',
     image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80',
     fallbackGradient: 'from-red-950 via-stone-900 to-black',

@@ -9,7 +9,6 @@ export const products = sqliteTable('products', {
   oldPrice: integer('oldPrice'),
   inStock: integer('inStock', { mode: 'boolean' }).notNull().default(true),
   isPreorder: integer('isPreorder', { mode: 'boolean' }).default(false),
-  stockCount: integer('stockCount'),
   badge: text('badge'),
   image: text('image').notNull(),
   fallbackGradient: text('fallbackGradient').notNull(),

@@ -102,9 +102,9 @@ export default function ProductModal() {
                 {quickViewProduct.oldPrice.toLocaleString('ru-RU')} ₽
               </span>
             )}
-            <span className="ml-auto text-xs font-mono text-emerald-400 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              {quickViewProduct.inStock ? 'В наличии' : 'Предзаказ'}
+            <span className={`ml-auto text-xs font-mono flex items-center gap-1 ${quickViewProduct.inStock ? 'text-emerald-400' : 'text-rose-400'}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${quickViewProduct.inStock ? 'bg-emerald-400' : 'bg-rose-500'}`} />
+              {quickViewProduct.inStock ? 'В наличии' : 'Нет в наличии'}
             </span>
           </div>
 
@@ -185,14 +185,18 @@ export default function ProductModal() {
 
             <button
               onClick={handleAdd}
-              disabled={isAdded}
-              className={`flex-1 py-3 px-4 text-xs font-semibold rounded-lg flex items-center justify-center gap-2 transition-all cursor-pointer ${
-                isAdded
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-primary hover:bg-primary-500 text-white shadow-lg shadow-red-950/50 active:scale-95'
+              disabled={isAdded || !quickViewProduct.inStock}
+              className={`flex-1 py-3 px-4 text-xs font-semibold rounded-lg flex items-center justify-center gap-2 transition-all ${
+                !quickViewProduct.inStock
+                  ? 'bg-muted/50 text-muted-foreground cursor-not-allowed opacity-60'
+                  : isAdded
+                  ? 'bg-emerald-600 text-white cursor-pointer'
+                  : 'bg-primary hover:bg-primary-500 text-white shadow-lg shadow-red-950/50 active:scale-95 cursor-pointer'
               }`}
             >
-              {isAdded ? (
+              {!quickViewProduct.inStock ? (
+                <span>Товара нет в наличии</span>
+              ) : isAdded ? (
                 <>
                   <Check className="w-4 h-4" />
                   <span>Добавлено в заказ!</span>

@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { X, RefreshCw, Upload } from 'lucide-react';
-import { Product, ProductCategory } from '@/types';
-import { CATEGORIES } from '@/lib/data';
+import { X, RefreshCw, Upload, Plus, Edit2, Trash2, Check } from 'lucide-react';
+import { Product } from '@/types';
+import { useCart } from '@/lib/cart-context';
+import { UNCATEGORIZED_CATEGORY } from '@/lib/data';
 
 interface ProductEditModalProps {
   editingProduct: Product;
@@ -17,8 +18,60 @@ export function ProductEditModal({
   setEditingProduct,
   onSave,
 }: ProductEditModalProps) {
+  const { categories, addCategory, updateCategory, deleteCategory } = useCart();
   const [isDraggingImage, setIsDraggingImage] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+  // Category management inline state
+  const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newCatLabel, setNewCatLabel] = useState('');
+  const [isEditingCategory, setIsEditingCategory] = useState(false);
+  const [editCatLabel, setEditCatLabel] = useState('');
+
+  // Combined available categories
+  const allAvailableCategories = categories.some((c) => c.id === UNCATEGORIZED_CATEGORY.id)
+    ? categories
+    : [...categories, UNCATEGORIZED_CATEGORY];
+
+  const currentCat = allAvailableCategories.find((c) => c.id === editingProduct.category) || {
+    id: editingProduct.category || UNCATEGORIZED_CATEGORY.id,
+    label: editingProduct.categoryName || UNCATEGORIZED_CATEGORY.label,
+  };
+
+  const handleCreateCategory = () => {
+    if (!newCatLabel.trim()) return;
+    const newCat = addCategory(newCatLabel.trim());
+    setEditingProduct({
+      ...editingProduct,
+      category: newCat.id,
+      categoryName: newCat.label,
+    });
+    setNewCatLabel('');
+    setIsAddingCategory(false);
+  };
+
+  const handleUpdateCategory = () => {
+    if (!editCatLabel.trim()) return;
+    updateCategory(currentCat.id, editCatLabel.trim());
+    setEditingProduct({
+      ...editingProduct,
+      categoryName: editCatLabel.trim(),
+    });
+    setIsEditingCategory(false);
+  };
+
+  const handleDeleteCategory = () => {
+    if (currentCat.id === UNCATEGORIZED_CATEGORY.id) return;
+    if (confirm(`Удалить категорию «${currentCat.label}»? Товары в ней станут «Без категории».`)) {
+      deleteCategory(currentCat.id);
+      setEditingProduct({
+        ...editingProduct,
+        category: UNCATEGORIZED_CATEGORY.id,
+        categoryName: UNCATEGORIZED_CATEGORY.label,
+      });
+      setIsEditingCategory(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
@@ -47,26 +100,122 @@ export function ProductEditModal({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-muted-foreground font-medium mb-1">Категория</label>
-              <select
-                value={editingProduct.category}
-                onChange={(e) => {
-                  const cat = e.target.value as ProductCategory;
-                  const catObj = CATEGORIES.find((c) => c.id === cat);
-                  setEditingProduct({
-                    ...editingProduct,
-                    category: cat,
-                    categoryName: catObj ? catObj.label : 'Мерч',
-                  });
-                }}
-                className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500 cursor-pointer"
-              >
-                {CATEGORIES.filter((c) => c.id !== 'all').map((c) => (
-                  <option key={c.id} value={c.id}>{c.label}</option>
-                ))}
-              </select>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-muted-foreground font-medium">Категория *</label>
+                {!isAddingCategory && !isEditingCategory && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAddingCategory(true);
+                      setNewCatLabel('');
+                    }}
+                    className="text-[11px] text-primary-400 hover:text-white flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>Создать</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Inline category creation form */}
+              {isAddingCategory ? (
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="text"
+                    placeholder="Название категории"
+                    value={newCatLabel}
+                    onChange={(e) => setNewCatLabel(e.target.value)}
+                    className="w-full bg-card border border-primary-500 rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCreateCategory}
+                    className="p-1.5 bg-primary text-white rounded-lg hover:bg-primary-500 cursor-pointer shrink-0"
+                    title="Сохранить категорию"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsAddingCategory(false)}
+                    className="p-1.5 bg-card border border-border text-muted-foreground hover:text-white rounded-lg cursor-pointer shrink-0"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ) : isEditingCategory ? (
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="text"
+                    value={editCatLabel}
+                    onChange={(e) => setEditCatLabel(e.target.value)}
+                    className="w-full bg-card border border-primary-500 rounded-lg px-3 py-1.5 text-white text-xs focus:outline-none"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={handleUpdateCategory}
+                    className="p-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 cursor-pointer shrink-0"
+                    title="Сохранить название"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingCategory(false)}
+                    className="p-1.5 bg-card border border-border text-muted-foreground hover:text-white rounded-lg cursor-pointer shrink-0"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5">
+                  <select
+                    value={editingProduct.category}
+                    onChange={(e) => {
+                      const catId = e.target.value;
+                      const catObj = allAvailableCategories.find((c) => c.id === catId);
+                      setEditingProduct({
+                        ...editingProduct,
+                        category: catId,
+                        categoryName: catObj ? catObj.label : 'Без категории',
+                      });
+                    }}
+                    className="w-full bg-card border border-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500 cursor-pointer"
+                  >
+                    {allAvailableCategories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.label}</option>
+                    ))}
+                  </select>
+
+                  {/* Actions for current category */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsEditingCategory(true);
+                      setEditCatLabel(currentCat.label);
+                    }}
+                    className="p-2 bg-card border border-border text-muted-foreground hover:text-white rounded-lg cursor-pointer shrink-0"
+                    title="Переименовать категорию"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </button>
+
+                  {currentCat.id !== UNCATEGORIZED_CATEGORY.id && (
+                    <button
+                      type="button"
+                      onClick={handleDeleteCategory}
+                      className="p-2 bg-card border border-border text-muted-foreground hover:text-primary-400 rounded-lg cursor-pointer shrink-0"
+                      title="Удалить категорию"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
 
             <div>
@@ -81,7 +230,7 @@ export function ProductEditModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-muted-foreground font-medium mb-1">Цена (₽) *</label>
               <input
@@ -103,16 +252,6 @@ export function ProductEditModal({
                 className="w-full bg-card border border-border rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-primary-500 font-mono"
               />
             </div>
-
-            <div>
-              <label className="block text-muted-foreground font-medium mb-1">Остаток на складе (шт)</label>
-              <input
-                type="number"
-                value={editingProduct.stockCount || 10}
-                onChange={(e) => setEditingProduct({ ...editingProduct, stockCount: Number(e.target.value) })}
-                className="w-full bg-card border border-border rounded-lg px-3.5 py-2 text-white focus:outline-none focus:border-primary-500 font-mono"
-              />
-            </div>
           </div>
 
           <div className="flex items-center gap-4 py-1">
@@ -123,7 +262,7 @@ export function ProductEditModal({
                 onChange={(e) => setEditingProduct({ ...editingProduct, inStock: e.target.checked })}
                 className="rounded bg-card border-border text-primary focus:ring-primary-500 cursor-pointer"
               />
-              <span>Товар есть в наличии (иначе Предзаказ)</span>
+              <span className="text-white font-medium">Товар в наличии (если сброшено — «Нет в наличии»)</span>
             </label>
           </div>
 

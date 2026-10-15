@@ -2,7 +2,8 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { Search, Plus, Check, Edit2, Trash2 } from 'lucide-react';
 import { Product } from '@/types';
-import { CATEGORIES } from '@/lib/data';
+import { useCart } from '@/lib/cart-context';
+import { UNCATEGORIZED_CATEGORY } from '@/lib/data';
 
 interface AdminProductsTabProps {
   products: Product[];
@@ -19,9 +20,15 @@ export function AdminProductsTab({
   onOpenAddProduct,
   onEditProduct,
 }: AdminProductsTabProps) {
+  const { categories } = useCart();
   const [productSearch, setProductSearch] = useState('');
   const [productCategoryFilter, setProductCategoryFilter] = useState<string>('all');
   const [inlinePrices, setInlinePrices] = useState<Record<string, number>>({});
+
+  // Dynamic categories list for filter
+  const filterCategories = categories.some((c) => c.id === UNCATEGORIZED_CATEGORY.id)
+    ? categories
+    : [...categories, UNCATEGORIZED_CATEGORY];
 
   const filteredProducts = products.filter((p) => {
     const matchesCat = productCategoryFilter === 'all' || p.category === productCategoryFilter;
@@ -55,7 +62,7 @@ export function AdminProductsTab({
             className="bg-card border border-border rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-primary-500 cursor-pointer"
           >
             <option value="all">Все категории</option>
-            {CATEGORIES.filter((c) => c.id !== 'all').map((c) => (
+            {filterCategories.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.label}
               </option>
@@ -83,8 +90,7 @@ export function AdminProductsTab({
                 <th className="py-3 px-4">Категория</th>
                 <th className="py-3 px-4">Цена (₽)</th>
                 <th className="py-3 px-4">Старая цена</th>
-                <th className="py-3 px-4">Статус</th>
-                <th className="py-3 px-4">Остаток</th>
+                <th className="py-3 px-4">Статус наличия</th>
                 <th className="py-3 px-4 text-right">Действия</th>
               </tr>
             </thead>
@@ -155,16 +161,11 @@ export function AdminProductsTab({
                         className={`px-2.5 py-1 rounded text-[11px] font-mono font-medium transition-colors cursor-pointer ${
                           p.inStock
                             ? 'bg-emerald-950/60 border border-emerald-800/60 text-emerald-400'
-                            : 'bg-amber-950/60 border border-amber-800/60 text-amber-400'
+                            : 'bg-rose-950/60 border border-rose-800/60 text-rose-400'
                         }`}
                       >
-                        {p.inStock ? 'В наличии' : 'Предзаказ'}
+                        {p.inStock ? 'В наличии' : 'Нет в наличии'}
                       </button>
-                    </td>
-
-                    {/* Stock count */}
-                    <td className="py-3 px-4 font-mono text-muted-foreground">
-                      {p.stockCount ?? '10'} шт
                     </td>
 
                     {/* Actions */}

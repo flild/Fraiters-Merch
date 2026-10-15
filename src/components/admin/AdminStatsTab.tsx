@@ -16,7 +16,6 @@ export interface AdminStats {
   categoryBreakdown: { categoryName: string; unitsSold: number; revenue: number }[];
   deliveryStatsMap: Record<string, { count: number; name: string }>;
   statusStatsMap: Record<string, number>;
-  lowStockProducts: Product[];
   days: { label: string; shortDay: string; revenue: number; orders: number }[];
   maxDayRevenue: number;
 }
@@ -299,7 +298,6 @@ export function AdminStatsTab({ stats, seedDemoOrders, handleExportData }: Admin
                     const revenueShare = stats.totalRevenue > 0
                       ? Math.round((item.revenue / stats.totalRevenue) * 100)
                       : 0;
-                    const isLowStock = (item.product.stockCount ?? 10) <= 5;
 
                     return (
                       <tr key={item.product.id} className="hover:bg-card/40 transition-colors">
@@ -355,15 +353,15 @@ export function AdminStatsTab({ stats, seedDemoOrders, handleExportData }: Admin
                           </div>
                         </td>
                         <td className="py-3 px-3 text-right">
-                          {isLowStock ? (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-primary-950/80 text-primary-400 border border-primary-800/60">
-                              Остаток: {item.product.stockCount ?? 0} шт
-                            </span>
-                          ) : (
-                            <span className="text-[11px] font-mono text-muted-foreground">
-                              {item.product.stockCount ?? 10} шт.
-                            </span>
-                          )}
+                          <span
+                            className={`inline-flex items-center gap-1 text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                              item.product.inStock
+                                ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/60'
+                                : 'bg-rose-950/80 text-rose-400 border border-rose-800/60'
+                            }`}
+                          >
+                            {item.product.inStock ? 'В наличии' : 'Нет в наличии'}
+                          </span>
                         </td>
                       </tr>
                     );
@@ -411,20 +409,6 @@ export function AdminStatsTab({ stats, seedDemoOrders, handleExportData }: Admin
             </div>
           </div>
 
-          {/* Stock alert footer */}
-          {stats.lowStockProducts.length > 0 && (
-            <div className="mt-6 p-3 bg-primary-950/40 border border-primary-900/60 rounded-xl flex items-start gap-2.5 text-xs text-primary-200">
-              <AlertTriangle className="w-4 h-4 text-primary-400 shrink-0 mt-0.5" />
-              <div>
-                <div className="font-semibold text-white">
-                  {stats.lowStockProducts.length} поз. заканчиваются
-                </div>
-                <div className="text-[11px] text-muted-foreground mt-0.5">
-                  Требуется допечатка в типографии (остаток ≤ 5 шт.)
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,9 @@
-export type ProductCategory = 'all' | 'stands' | 'keychains' | 'stickers' | 'pins' | 'apparel' | 'prints';
+export type ProductCategory = string;
+
+export interface CategoryItem {
+  id: string;
+  label: string;
+}
 
 export type AppSection = 'home' | 'catalog' | 'delivery' | 'reviews' | 'faq' | 'admin';
 
@@ -22,7 +27,6 @@ export interface Product {
   oldPrice?: number;
   inStock: boolean;
   isPreorder?: boolean;
-  stockCount?: number;
   badge?: string;
   image: string;
   fallbackGradient: string;
