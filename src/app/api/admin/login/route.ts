@@ -60,7 +60,7 @@ export async function POST(request: Request) {
         name: 'admin_session',
         value: hashedCookieValue,
         httpOnly: true,
-        secure: false,
+        secure: process.env.NEXT_PUBLIC_SITE_URL?.startsWith('https') && process.env.NODE_ENV === 'production',
         sameSite: 'lax',
         path: '/',
         maxAge: 60 * 60 * 24 * 7, // 1 week
