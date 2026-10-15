@@ -1,10 +1,14 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, OrderFormValues, AppSection, ViewMode, OrderRecord } from '@/types';
-import { PRODUCTS as INITIAL_PRODUCTS, INITIAL_ORDERS } from './data';
+import { Product, CartItem, OrderFormValues, AppSection, ViewMode, OrderRecord, CategoryItem } from '@/types';
+import { PRODUCTS as INITIAL_PRODUCTS, INITIAL_ORDERS, DEFAULT_CATEGORIES, UNCATEGORIZED_CATEGORY } from './data';
 
 interface CartContextType {
+  categories: CategoryItem[];
+  addCategory: (label: string) => CategoryItem;
+  updateCategory: (id: string, label: string) => void;
+  deleteCategory: (id: string) => void;
   cart: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
@@ -57,6 +61,73 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     return [];
   });
+
+  // Dynamic categories list from localStorage
+  const [categories, setCategories] = useState<CategoryItem[]>(() => {
+    if (typeof window === 'undefined') return DEFAULT_CATEGORIES;
+    try {
+      const saved = localStorage.getItem('fraiters_merch_categories');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // Ignore
+    }
+    return DEFAULT_CATEGORIES;
+  });
+
+  // Sync categories to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('fraiters_merch_categories', JSON.stringify(categories));
+    } catch {
+      // Ignore
+    }
+  }, [categories]);
+
+  const addCategory = (label: string): CategoryItem => {
+    const trimmed = label.trim();
+    if (!trimmed) return UNCATEGORIZED_CATEGORY;
+    const existing = categories.find((c) => c.label.toLowerCase() === trimmed.toLowerCase());
+    if (existing) return existing;
+
+    const slug = trimmed.toLowerCase().replace(/[^a-z0-9а-яё]/gi, '-').replace(/-+/g, '-');
+    const id = `cat-${slug || 'new'}`;
+    const newCat: CategoryItem = {
+      id,
+      label: trimmed,
+    };
+    setCategories((prev) => [...prev, newCat]);
+    showToast(`Категория «${trimmed}» создана`);
+    return newCat;
+  };
+
+  const updateCategory = (id: string, label: string) => {
+    const trimmed = label.trim();
+    if (!trimmed) return;
+    setCategories((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, label: trimmed } : c))
+    );
+    // Update categoryName in products that use this category
+    setProducts((prev) =>
+      prev.map((p) => (p.category === id ? { ...p, categoryName: trimmed } : p))
+    );
+    showToast('Категория обновлена');
+  };
+
+  const deleteCategory = (id: string) => {
+    setCategories((prev) => prev.filter((c) => c.id !== id));
+    // Update affected products to 'uncategorized'
+    setProducts((prev) =>
+      prev.map((p) =>
+        p.category === id
+          ? { ...p, category: UNCATEGORIZED_CATEGORY.id, categoryName: UNCATEGORIZED_CATEGORY.label }
+          : p
+      )
+    );
+    showToast('Категория удалена. Связанные товары теперь «Без категории».');
+  };
 
   // Dynamic products list from server
   const [products, setProducts] = useState<Product[]>([]);
@@ -302,6 +373,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         toastMessage,
         viewMode,
         setViewMode,
+
+        // Categories
+        categories,
+        addCategory,
+        updateCategory,
+        deleteCategory,
 
         // Products
         products,

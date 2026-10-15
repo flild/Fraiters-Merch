@@ -88,8 +88,6 @@ export default function AdminPanel() {
     const categoryBreakdown = Object.values(categoryStatsMap)
       .sort((a, b) => b.revenue - a.revenue);
 
-    const lowStockProducts = products.filter((p) => (p.stockCount ?? 10) <= 5);
-
     // Sales timeline by recent days
     const days = [
       { label: '28 сен', shortDay: 'Пн', revenue: 0, orders: 0 },
@@ -113,11 +111,10 @@ export default function AdminPanel() {
       categoryBreakdown,
       deliveryStatsMap,
       statusStatsMap,
-      lowStockProducts,
       days,
       maxDayRevenue,
     };
-  }, [orders, products]);
+  }, [orders]);
 
   const handleOpenAddProduct = () => {
     const newProd: Product = {
@@ -127,7 +124,6 @@ export default function AdminPanel() {
       categoryName: 'Акриловый стенд',
       price: 900,
       inStock: true,
-      stockCount: 10,
       image: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&auto=format&fit=crop&q=80',
       fallbackGradient: 'from-red-950 via-neutral-900 to-black',
       description: 'Новый авторский товар Fraiters с двусторонней печатью.',

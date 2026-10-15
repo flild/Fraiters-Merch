@@ -3,12 +3,12 @@ import Image from 'next/image';
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, ShoppingBag, Eye, Check, Sparkles } from 'lucide-react';
-import { CATEGORIES } from '@/lib/data';
+import { UNCATEGORIZED_CATEGORY } from '@/lib/data';
 import { Product, ProductCategory } from '@/types';
 import { useCart } from '@/lib/cart-context';
 
 export default function ProductCatalog({ limit, initialProducts }: { limit?: number, initialProducts: Product[] }) {
-  const { addToCart, setQuickViewProduct, cart } = useCart();
+  const { addToCart, setQuickViewProduct, cart, categories } = useCart();
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [onlyInStock, setOnlyInStock] = useState(false);
@@ -16,6 +16,17 @@ export default function ProductCatalog({ limit, initialProducts }: { limit?: num
 
   // Use products passed from server, or fallback to empty array
   const products = useMemo(() => initialProducts || [], [initialProducts]);
+
+  // Dynamic catalog tabs
+  const catalogCategories = useMemo(() => {
+    const list = [{ id: 'all', label: 'Весь мерч' }, ...categories];
+    const hasUncategorized = products.some((p) => p.category === UNCATEGORIZED_CATEGORY.id);
+    const inList = list.some((c) => c.id === UNCATEGORIZED_CATEGORY.id);
+    if (hasUncategorized && !inList) {
+      list.push(UNCATEGORIZED_CATEGORY);
+    }
+    return list;
+  }, [categories, products]);
 
   const filteredProducts = useMemo(() => {
     let result = products.filter((item) => {
@@ -92,7 +103,7 @@ export default function ProductCatalog({ limit, initialProducts }: { limit?: num
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border/80 mb-8">
           {/* Segmented Category Buttons with smooth layoutId animation */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-2 sm:pb-0 scrollbar-none">
-            {CATEGORIES.map((cat) => {
+            {catalogCategories.map((cat) => {
               const isActive = selectedCategory === cat.id;
               return (
                 <button
@@ -178,10 +189,10 @@ export default function ProductCatalog({ limit, initialProducts }: { limit?: num
                     <div className="absolute top-2.5 right-2.5 z-10 text-[10px] font-mono px-2 py-0.5 rounded bg-black/75 backdrop-blur-sm text-muted-foreground border border-border/60 flex items-center gap-1">
                       <span
                         className={`w-1.5 h-1.5 rounded-full ${
-                          product.inStock ? 'bg-emerald-400' : 'bg-amber-400'
+                          product.inStock ? 'bg-emerald-400' : 'bg-rose-500'
                         }`}
                       />
-                      <span>{product.inStock ? 'В наличии' : 'Предзаказ'}</span>
+                      <span>{product.inStock ? 'В наличии' : 'Нет в наличии'}</span>
                     </div>
 
                     {/* Product Image with Fallback */}
@@ -255,15 +266,26 @@ export default function ProductCatalog({ limit, initialProducts }: { limit?: num
                       </div>
 
                       <button
-                        onClick={(e) => handleAdd(product, e)}
-                        className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 ${
-                          isAdded
-                            ? 'bg-emerald-600 text-white'
-                            : 'bg-primary hover:bg-primary-500 text-white shadow-md shadow-red-950'
+                        onClick={(e) => {
+                          if (!product.inStock) {
+                            e.stopPropagation();
+                            return;
+                          }
+                          handleAdd(product, e);
+                        }}
+                        disabled={!product.inStock}
+                        className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all ${
+                          !product.inStock
+                            ? 'bg-muted/50 text-muted-foreground cursor-not-allowed opacity-60'
+                            : isAdded
+                            ? 'bg-emerald-600 text-white cursor-pointer active:scale-95'
+                            : 'bg-primary hover:bg-primary-500 text-white shadow-md shadow-red-950 cursor-pointer active:scale-95'
                         }`}
-                        title="Добавить в корзину"
+                        title={product.inStock ? "Добавить в корзину" : "Товара нет в наличии"}
                       >
-                        {isAdded ? (
+                        {!product.inStock ? (
+                          <span>Нет в наличии</span>
+                        ) : isAdded ? (
                           <>
                             <Check className="w-3.5 h-3.5" />
                             <span>В корзине!</span>
